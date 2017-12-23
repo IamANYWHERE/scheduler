@@ -3,9 +3,9 @@ package com.toplyh.android.scheduler.service.presenter;
 import android.content.Context;
 import android.content.Intent;
 
-import com.toplyh.android.scheduler.service.entity.state.RegisterState;
-import com.toplyh.android.scheduler.service.entity.User;
-import com.toplyh.android.scheduler.service.manager.DataManager;
+import com.toplyh.android.scheduler.service.entity.remote.Count;
+import com.toplyh.android.scheduler.service.entity.remote.HttpsResult;
+import com.toplyh.android.scheduler.service.manager.RemoteManager;
 import com.toplyh.android.scheduler.service.view.RegisterView;
 import com.toplyh.android.scheduler.service.view.View;
 
@@ -18,9 +18,10 @@ import rx.subscriptions.CompositeSubscription;
  * Created by 我 on 2017/11/23.
  */
 
+/*
 public class RegisterPresenter implements Presenter {
 
-    private DataManager manager;
+    private RemoteManager manager;
 
     private CompositeSubscription mCompositeSubscription;
 
@@ -28,14 +29,14 @@ public class RegisterPresenter implements Presenter {
 
     private RegisterView mRegisterView;
 
-    private RegisterState mRegisterState;
+    private HttpsResult<String> mHttpsResult;
 
     public RegisterPresenter(Context context){
         this.mContext=context;
     }
     @Override
     public void onCreate() {
-        this.manager=new DataManager(mContext);
+        this.manager=new RemoteManager(mContext);
         mCompositeSubscription=new CompositeSubscription();
     }
 
@@ -66,15 +67,15 @@ public class RegisterPresenter implements Presenter {
 
     }
 
-    public void registerUser(User user){
-        mCompositeSubscription.add(manager.registerUser(user)
+    public void registerUser(Count count){
+        mCompositeSubscription.add(manager.registerUser(count)
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(new Subscriber<RegisterState>() {
+        .subscribe(new Subscriber<HttpsResult<String>>() {
             @Override
             public void onCompleted() {
-                if (mRegisterState !=null){
-                    mRegisterView.OnSuccess(mRegisterState);
+                if (mHttpsResult !=null){
+                    mRegisterView.OnSuccess(mHttpsResult);
                 }
             }
 
@@ -85,9 +86,10 @@ public class RegisterPresenter implements Presenter {
             }
 
             @Override
-            public void onNext(RegisterState registerState) {
-                mRegisterState = registerState;
+            public void onNext(HttpsResult<String> result) {
+                mHttpsResult = result;
             }
         }));
     }
 }
+*/

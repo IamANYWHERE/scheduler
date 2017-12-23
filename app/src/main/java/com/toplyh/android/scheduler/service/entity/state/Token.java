@@ -1,14 +1,12 @@
 package com.toplyh.android.scheduler.service.entity.state;
 
 /**
- * Created by 我 on 2017/11/23.
+ * Created by 我 on 2017/12/4.
  */
 
-public class LoginState {
+public class Token {
 
     private String token;
-
-    private int state;
 
     public String getToken() {
         return token;
@@ -16,13 +14,5 @@ public class LoginState {
 
     public void setToken(String token) {
         this.token = token;
-    }
-
-    public int getState() {
-        return state;
-    }
-
-    public void setState(int state) {
-        this.state = state;
     }
 }

@@ -5,4 +5,7 @@ package com.toplyh.android.scheduler.service.view;
  */
 
 public interface View {
+    void showDialog();
+    void cancelDialog();
+    void toastMessage(String msg);
 }

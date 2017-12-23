@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">Scheduler</string>
+    <string name="add">ADD</string>
+    <string name="enter_new_note">note</string>
+    <string name="click_to_remove">instructions</string>
+
+    <string name="token">token</string>
+    <string name="username">username</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="send_mode_1">Echo STOMP</string>
+    <string name="send_mode_2">Echo REST</string>
+    <string name="connect_stomp">Connect STOMP</string>
+    <string name="disconnect_stomp">DISCONNECT STOMP</string>
 </resources>

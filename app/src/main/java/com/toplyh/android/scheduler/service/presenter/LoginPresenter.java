@@ -2,10 +2,17 @@ package com.toplyh.android.scheduler.service.presenter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
-import com.toplyh.android.scheduler.service.entity.User;
-import com.toplyh.android.scheduler.service.entity.state.LoginState;
-import com.toplyh.android.scheduler.service.manager.DataManager;
+import com.google.gson.Gson;
+import com.toplyh.android.scheduler.R;
+import com.toplyh.android.scheduler.service.ApiCallBack;
+import com.toplyh.android.scheduler.service.entity.local.User;
+import com.toplyh.android.scheduler.service.entity.remote.Count;
+import com.toplyh.android.scheduler.service.entity.remote.HttpsResult;
+import com.toplyh.android.scheduler.service.entity.state.Token;
+import com.toplyh.android.scheduler.service.manager.RemoteManager;
+import com.toplyh.android.scheduler.service.utils.SharedPreferencesUtils;
 import com.toplyh.android.scheduler.service.view.LoginView;
 import com.toplyh.android.scheduler.service.view.View;
 
@@ -18,78 +25,72 @@ import rx.subscriptions.CompositeSubscription;
  * Created by 我 on 2017/11/23.
  */
 
-public class LoginPresenter implements Presenter {
+public class LoginPresenter extends BasePresenter<LoginView> {
 
-    private DataManager manager;
-
-    private CompositeSubscription mCompositeSubscription;
-
-    private Context mContext;
-
+    private HttpsResult<Token> mHttpsResult;
     private LoginView mLoginView;
 
-    private LoginState mState;
-
-    public LoginPresenter(Context context){
-        this.mContext=context;
+    public LoginPresenter(Context context,LoginView loginView){
+        super(context);
+        attachView(loginView);
+        this.mLoginView=loginView;
     }
 
 
-    @Override
-    public void onCreate() {
-        manager=new DataManager(mContext);
-        mCompositeSubscription=new CompositeSubscription();
-    }
 
-    @Override
-    public void onStart() {
 
-    }
 
-    @Override
-    public void onStop() {
-        if (mCompositeSubscription.hasSubscriptions()){
-            mCompositeSubscription.unsubscribe();
+    public void loginUser(){
+        final String userName=mLoginView.getUseName();
+        String pwd=mLoginView.getPassword();
+
+        if (userName==null||userName.equals("")||pwd==null||pwd.equals("")){
+            mLoginView.userOrPwdIsNull();
+            return;
         }
-    }
 
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void attachView(View view) {
-        mLoginView=(LoginView)view;
-    }
-
-    @Override
-    public void attachIncomingIntent(Intent intent) {
-
-    }
-
-    public void LoginUser(User user){
-        mCompositeSubscription.add(manager.loginUser(user)
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(new Subscriber<LoginState>() {
+        mLoginView.showDialog();
+        ApiCallBack<HttpsResult<Token>> subscriber=new ApiCallBack<HttpsResult<Token>>() {
             @Override
-            public void onCompleted() {
-                if (mState!=null){
-                    mLoginView.OnSuccess(mState);
+            public void onSuccess(HttpsResult<Token> model) {
+                mLoginView.cancelDialog();
+                if (model.getState()==100){
+                    //closeRetrofit();
+                    mLoginView.toMainActivity();
+                    saveUserToken(model,userName);
+                }else {
+                    mLoginView.toastMessage("账号或密码错误！");
                 }
             }
 
             @Override
-            public void onError(Throwable e) {
-                e.printStackTrace();
-                mLoginView.onError("请求失败");
+            public void onFailure(String msg) {
+                Log.e("dandy", "onFailure: "+msg );
+                mLoginView.cancelDialog();
             }
 
             @Override
-            public void onNext(LoginState state) {
-                mState=state;
+            public void onFinish() {
+
             }
-        }));
+        };
+
+        Count count=new Count();
+        count.setName(userName);
+        count.setPassword(pwd);
+        addSubscription(mRemoteManager.loginUser(count),subscriber);
+    }
+
+    private void saveUserToken(HttpsResult<Token> token,String username){
+        SharedPreferencesUtils.setParam(mContext,
+                mContext.getString(R.string.token)
+                ,token.getData().getToken());
+        SharedPreferencesUtils.setParam(mContext,
+                mContext.getString(R.string.username),
+                username);
+    }
+
+    public void destroy(){
+        detachView();
     }
 }

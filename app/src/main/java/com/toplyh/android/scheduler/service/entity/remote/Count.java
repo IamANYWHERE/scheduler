@@ -1,10 +1,10 @@
-package com.toplyh.android.scheduler.service.entity;
+package com.toplyh.android.scheduler.service.entity.remote;
 
 /**
  * Created by 我 on 2017/11/23.
  */
 
-public class User {
+public class Count {
 
     /**
      * id : 2
