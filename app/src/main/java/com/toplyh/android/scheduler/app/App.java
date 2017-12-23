@@ -24,6 +24,7 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
         mBoxStore= MyObjectBox.builder().androidContext(App.this).build();
         if (BuildConfig.DEBUG){
             new AndroidObjectBrowser(mBoxStore).start(this);
