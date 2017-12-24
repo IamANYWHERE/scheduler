@@ -35,7 +35,7 @@ public class RetrofitHelper {
     //长缓存有效期1天
     public static final int CACHE_STALE_LONG=60*60*24;
     //base_url
-    public static final String BASE_URL="http://47.94.12.38:8081/";
+    public static final String BASE_URL="http://192.168.1.102:8081/api/";
 
 
     private Context mContext;

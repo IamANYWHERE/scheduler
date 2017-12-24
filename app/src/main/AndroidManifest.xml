@@ -23,6 +23,11 @@
         <activity android:name=".ui.test.ReactiveNoteActivity">
         </activity>
         <activity android:name=".ui.test.LoginActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
         </activity>
         <activity android:name=".ui.test.NettyActivity">
         </activity>
@@ -31,11 +36,9 @@
         <activity android:name=".ui.test.CheatActivity">
         </activity>
         <activity android:name=".ui.test.StompActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+        </activity>
+        <activity android:name=".ui.test.TestLoginActivity">
 
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
     </application>
 

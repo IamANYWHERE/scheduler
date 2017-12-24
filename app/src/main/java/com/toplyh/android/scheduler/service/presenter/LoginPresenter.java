@@ -3,6 +3,7 @@ package com.toplyh.android.scheduler.service.presenter;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.toplyh.android.scheduler.R;
@@ -53,6 +54,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
         ApiCallBack<HttpsResult<Token>> subscriber=new ApiCallBack<HttpsResult<Token>>() {
             @Override
             public void onSuccess(HttpsResult<Token> model) {
+                Toast.makeText(mContext,"success",Toast.LENGTH_SHORT);
                 mLoginView.cancelDialog();
                 if (model.getState()==100){
                     //closeRetrofit();
