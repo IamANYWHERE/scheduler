@@ -1,95 +1,75 @@
 package com.toplyh.android.scheduler.service.presenter;
 
 import android.content.Context;
-import android.content.Intent;
 
+import com.toplyh.android.scheduler.service.ApiCallBack;
 import com.toplyh.android.scheduler.service.entity.remote.Count;
 import com.toplyh.android.scheduler.service.entity.remote.HttpsResult;
-import com.toplyh.android.scheduler.service.manager.RemoteManager;
+import com.toplyh.android.scheduler.service.entity.state.StateTable;
 import com.toplyh.android.scheduler.service.view.RegisterView;
-import com.toplyh.android.scheduler.service.view.View;
-
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
 
 /**
- * Created by 我 on 2017/11/23.
+ * Created by Michael on 2017/12/25.
  */
 
-/*
-public class RegisterPresenter implements Presenter {
+public class RegisterPresenter extends BasePresenter<RegisterView> {
 
-    private RemoteManager manager;
-
-    private CompositeSubscription mCompositeSubscription;
-
-    private Context mContext;
 
     private RegisterView mRegisterView;
 
-    private HttpsResult<String> mHttpsResult;
-
-    public RegisterPresenter(Context context){
-        this.mContext=context;
-    }
-    @Override
-    public void onCreate() {
-        this.manager=new RemoteManager(mContext);
-        mCompositeSubscription=new CompositeSubscription();
+    public RegisterPresenter(Context context,RegisterView registerView) {
+        super(context);
+        attachView(registerView);
+        this.mRegisterView=registerView;
     }
 
-    @Override
-    public void onStart() {
+    public void registerUser(){
+        String name=mRegisterView.getUserName();
+        String password=mRegisterView.getPassword();
+        String repeatPassword=mRegisterView.getRepeatPassword();
 
-    }
-
-    @Override
-    public void onStop() {
-        if (mCompositeSubscription.hasSubscriptions()){
-            mCompositeSubscription.unsubscribe();
+        if(name==null||name.equals("")||password==null||password.equals("")||repeatPassword==null||repeatPassword.equals("")){
+            mRegisterView.toastMessage("用户名或密码为空！");
+            return;
         }
-    }
 
-    @Override
-    public void pause() {
+        if(!password.equals(repeatPassword)){
+            mRegisterView.toastMessage("密码不一致！");
+            return;
+        }
 
-    }
-
-    @Override
-    public void attachView(View view) {
-        mRegisterView =(RegisterView)view;
-    }
-
-    @Override
-    public void attachIncomingIntent(Intent intent) {
-
-    }
-
-    public void registerUser(Count count){
-        mCompositeSubscription.add(manager.registerUser(count)
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(new Subscriber<HttpsResult<String>>() {
+        mRegisterView.showDialog();
+        ApiCallBack<HttpsResult<String>> subscriber=new ApiCallBack<HttpsResult<String>>() {
             @Override
-            public void onCompleted() {
-                if (mHttpsResult !=null){
-                    mRegisterView.OnSuccess(mHttpsResult);
+            public void onSuccess(HttpsResult<String> model) {
+                if(model.getState()== StateTable.REGISTER_RIGHT) {
+                    mRegisterView.cancelDialog();
+                    mRegisterView.toLoginActivity();
+                }else if(model.getState()==StateTable.REGISTER_ERROR){
+                    mRegisterView.toastMessage("此账号已经注册！");
                 }
             }
 
             @Override
-            public void onError(Throwable e) {
-                e.printStackTrace();
-                mRegisterView.onError("请求失败！");
+            public void onFailure(String msg) {
+                mRegisterView.cancelDialog();
+                mRegisterView.toastMessage(msg);
             }
 
             @Override
-            public void onNext(HttpsResult<String> result) {
-                mHttpsResult = result;
+            public void onFinish() {
+
             }
-        }));
+        };
+
+        Count count=new Count();
+        count.setName(name);
+        count.setPassword(password);
+        addSubscription(mRemoteManager.registerUser(count),subscriber);
+    }
+
+
+    public void destroy(){
+        detachView();
     }
 }
-*/

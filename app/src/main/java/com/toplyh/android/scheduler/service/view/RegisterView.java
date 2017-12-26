@@ -7,7 +7,8 @@ import com.toplyh.android.scheduler.service.entity.remote.HttpsResult;
  */
 
 public interface RegisterView extends View {
-
-    void OnSuccess(HttpsResult<String> result);
-    void onError(String result);
+    String getUserName();
+    String getPassword();
+    String getRepeatPassword();
+    void toLoginActivity();
 }

@@ -3,6 +3,7 @@ package com.toplyh.android.scheduler.service.presenter;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.toplyh.android.scheduler.R;
@@ -27,7 +28,6 @@ import rx.subscriptions.CompositeSubscription;
 
 public class LoginPresenter extends BasePresenter<LoginView> {
 
-    private HttpsResult<Token> mHttpsResult;
     private LoginView mLoginView;
 
     public LoginPresenter(Context context,LoginView loginView){

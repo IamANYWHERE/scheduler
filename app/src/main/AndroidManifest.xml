@@ -31,11 +31,15 @@
         <activity android:name=".ui.test.CheatActivity">
         </activity>
         <activity android:name=".ui.test.StompActivity">
+        </activity>
+        <activity android:name=".ui.activity.MaterialLoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+        </activity>
+        <activity android:name=".ui.activity.MaterialRegistActivity">
         </activity>
     </application>
 
