@@ -13,6 +13,7 @@ public class Count {
      */
 
     private String name;
+
     private String password;
 
     public String getName() {
