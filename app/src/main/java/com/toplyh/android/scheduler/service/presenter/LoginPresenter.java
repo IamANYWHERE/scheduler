@@ -53,6 +53,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
         ApiCallBack<HttpsResult<Token>> subscriber=new ApiCallBack<HttpsResult<Token>>() {
             @Override
             public void onSuccess(HttpsResult<Token> model) {
+                Toast.makeText(mContext,"success",Toast.LENGTH_SHORT);
                 mLoginView.cancelDialog();
                 if (model.getState()==100){
                     //closeRetrofit();
