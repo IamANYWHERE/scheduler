@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/modifyPhoto"
+        android:layout_marginTop="@dimen/userinfotopmargin"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:id="@+id/modifyPhotoImage"
+            android:gravity="center"
+            android:src="@drawable/ic_action_modifyphotoimage"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:id="@+id/modifyPhotoText"
+            android:gravity="left"
+            android:text="@string/modifyPhotoText"
+            android:textSize="@dimen/textSize"/>
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:src="@drawable/ic_action_own"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/modifyName"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:id="@+id/modifyNameImage"
+            android:gravity="center"
+            android:src="@drawable/ic_action_modifynameimage"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:id="@+id/modifyNameText"
+            android:gravity="left"
+            android:text="@string/modifyNameText"
+            android:textCursorDrawable="@null"
+            android:textSize="@dimen/textSize"/>
+
+        <EditText
+            android:id="@+id/user_info_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:gravity="right"
+            android:hint="@string/tempName"
+            android:background="@null"
+            android:maxLines="1"
+            android:layout_marginRight="@dimen/activity_vertical_margin"
+            android:textColor="@color/submitColor"
+            android:textSize="@dimen/dialogtextSize"/>
+
+    </LinearLayout>
+
+    <!--<LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/modifyskillmark"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:id="@+id/modifySkillMarkImage"
+            android:gravity="center"
+            android:src="@drawable/ic_action_modifynameimage"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:id="@+id/modifySkillMarkText"
+            android:gravity="left"
+            android:text="@string/modifySkillMarkText"
+            android:textCursorDrawable="@null"
+            android:textSize="@dimen/textSize"/>
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:gravity="right"
+            android:hint="@string/skillmark"
+            android:background="@null"
+            android:maxLines="1"
+            android:layout_marginRight="@dimen/activity_vertical_margin"
+            android:textColor="@color/submitColor"
+            android:textSize="@dimen/dialogtextSize"/>
+
+    </LinearLayout>-->
+
+
+
+
+    <com.ramotion.foldingcell.FoldingCell
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/folding_cell"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/modifyPasswordDetail"
+            android:visibility="gone"
+            android:orientation="vertical">
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/modifycurrentPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:passwordToggleEnabled="true"
+                app:passwordToggleTint="@color/colorAccent"
+                android:layout_marginLeft="@dimen/logusrpwdmargin"
+                android:layout_marginRight="@dimen/logusrpwdmargin"
+                app:errorEnabled="true">
+
+                <EditText
+                    android:id="@+id/user_info_current_pwd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/txCurrentPassword"
+                    android:inputType="textPassword"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/modifyeditPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:passwordToggleEnabled="true"
+                app:passwordToggleTint="@color/colorAccent"
+                android:layout_marginLeft="@dimen/logusrpwdmargin"
+                android:layout_below="@id/modifycurrentPassword"
+                android:layout_marginRight="@dimen/logusrpwdmargin"
+                app:errorEnabled="true">
+
+                <EditText
+                    android:id="@+id/user_info_new_pwd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/txNewPassword"
+                    android:inputType="textPassword"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/modifyeditPasswordConfirm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:passwordToggleEnabled="true"
+                app:passwordToggleTint="@color/colorAccent"
+                android:layout_marginLeft="@dimen/logusrpwdmargin"
+                android:layout_marginRight="@dimen/logusrpwdmargin"
+                android:layout_below="@id/modifyeditPassword"
+                app:errorEnabled="true">
+
+                <EditText
+                    android:id="@+id/user_info_repeat_pwd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/txConfirm"
+                    android:inputType="textPassword"/>
+            </android.support.design.widget.TextInputLayout>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/modifyPassword">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:id="@+id/modifyPasswordImage"
+                android:gravity="center"
+                android:src="@drawable/ic_action_modifypasswordimage"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:id="@+id/modifyPwdText"
+                android:gravity="left"
+                android:text="@string/modifyPwdText"
+                android:textSize="@dimen/textSize"/>
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="wrap_content"
+                android:id="@+id/gomodifyPasswordImage"
+                android:gravity="center"
+                android:src="@drawable/ic_action_gomodifypwd"/>
+
+        </LinearLayout>
+    </com.ramotion.foldingcell.FoldingCell>
+
+
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/submitModify"
+        android:id="@+id/submitModify"
+        android:textColor="@color/goRegister"
+        android:layout_centerHorizontal="true"
+        android:textSize="@dimen/submitModifytextSize"
+        android:layout_marginTop="@dimen/submitModifyMarginTop"
+        style="@style/Widget.AppCompat.Button.Borderless"/>
+
+
+</LinearLayout>
+

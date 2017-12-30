@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/progress_refresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    <com.dualcores.swagpoints.SwagPoints xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/total_progress"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:padding="64dp"
+        android:layout_gravity="center"
+        app:arcColor="#BEBEBE"
+        app:arcWidth="8dp"
+        app:indicatorIcon="@drawable/indicator"
+        app:max="100"
+        app:min="0"
+        app:progressColor="@color/color_progress"
+        app:progressWidth="12dp"
+        app:step="1"
+        app:textColor="#A1D9FF"
+        app:textSize="72sp" />
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+</RelativeLayout>

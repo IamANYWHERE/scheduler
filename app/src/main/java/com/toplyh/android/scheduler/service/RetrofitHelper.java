@@ -35,7 +35,7 @@ public class RetrofitHelper {
     //长缓存有效期1天
     public static final int CACHE_STALE_LONG=60*60*24;
     //base_url
-    public static final String BASE_URL="http://47.94.12.38:8081/api/";
+    public static final String BASE_URL="http://192.168.1.102:8081/api/";
 
 
     private Context mContext;
@@ -71,9 +71,7 @@ public class RetrofitHelper {
     }
 
     private void resetApp(){
-        Gson gson=new GsonBuilder()
-                .setDateFormat("yyyy-MM-dd hh:mm:ss")
-                .create();
+        Gson gson=new GsonBuilder().create();
         factory=GsonConverterFactory.create(gson);
 
         mRetrofit=new Retrofit.Builder()
@@ -94,7 +92,6 @@ public class RetrofitHelper {
         File cacheDirectory=new File(mContext.getCacheDir(),"HttpCache");
         Cache cache=new Cache(cacheDirectory,1024*1024*100);
 
-
         client=new OkHttpClient.Builder()
                 .connectTimeout(10, TimeUnit.SECONDS)
                 .writeTimeout(30,TimeUnit.SECONDS)
@@ -105,15 +102,14 @@ public class RetrofitHelper {
                         Request original=chain.request();
                         Request request=original.newBuilder()
                                 .addHeader("Content-Type","application/json")
-                                .addHeader("token", (String) SharedPreferencesUtils.
-                                        getParam(mContext,"token",""))
+                                .addHeader("token",(String)SharedPreferencesUtils.getParam(mContext,"token",""))
                                 .method(original.method(),original.body())
                                 .build();
+                        Log.e(App.TAG,(String)SharedPreferencesUtils.getParam(mContext,"token",""));
                         return chain.proceed(request);
                     }
                 })
                 .cache(cache)
                 .build();
     }
-
 }

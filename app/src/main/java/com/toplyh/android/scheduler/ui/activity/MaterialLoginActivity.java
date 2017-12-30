@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.toplyh.android.scheduler.R;
 import com.toplyh.android.scheduler.service.presenter.LoginPresenter;
+import com.toplyh.android.scheduler.service.view.HomePageView;
 import com.toplyh.android.scheduler.service.view.LoginView;
 import com.toplyh.android.scheduler.ui.test.LoginActivity;
 import com.toplyh.android.scheduler.ui.test.ReactiveNoteActivity;
@@ -60,7 +61,8 @@ public class MaterialLoginActivity extends BaseActivity implements LoginView {
 
     @Override
     public void toMainActivity() {
-        startActivity(new Intent(MaterialLoginActivity.this, ReactiveNoteActivity.class));
+        startActivity(new Intent(MaterialLoginActivity.this, HomePageActivity.class));
+        finish();
     }
 
     @Override

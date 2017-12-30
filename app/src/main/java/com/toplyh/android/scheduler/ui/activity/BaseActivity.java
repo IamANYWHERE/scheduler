@@ -29,7 +29,6 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
     protected Context mContext;
     private static final int REQUEST_CODE_PERMISSION=2020;//权限请求码
     private boolean isNeedCheckPermission=true;//判断是否需要检测，防止无限弹框申请权限
-    private Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

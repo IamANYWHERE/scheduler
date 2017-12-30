@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <com.toplyh.android.scheduler.ui.view.CircularImage
+        android:id="@+id/navi_headImage"
+        android:layout_width="@dimen/headwidth"
+        android:layout_height="@dimen/headheight"
+        android:src="@drawable/head"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/commonmargin"
+
+        />
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:id="@+id/navi_username"
+        android:layout_below="@id/navi_headImage"
+        android:text="@string/tempName"
+        android:layout_centerHorizontal="true"
+        android:textSize="@dimen/textSize"
+        android:layout_marginTop="@dimen/all_in_layout_paddingandmargin"
+        />
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:id="@+id/personaltags"
+        android:layout_below="@id/navi_username"
+        android:hint="@string/personaltags"
+        android:layout_centerHorizontal="true"
+        android:textSize="@dimen/textSize"
+        android:layout_marginTop="@dimen/all_in_layout_paddingandmargin"
+        />
+
+
+</RelativeLayout>

@@ -41,6 +41,12 @@
         </activity>
         <activity android:name=".ui.activity.MaterialRegistActivity">
         </activity>
+        <activity android:name=".ui.activity.HomePageActivity">
+        </activity>
+        <activity android:name=".ui.activity.UserInfoActivity">
+        </activity>
+        <activity android:name=".ui.activity.ProjectActivity">
+        </activity>
     </application>
 
 </manifest>

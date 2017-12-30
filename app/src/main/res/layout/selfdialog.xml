@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorTransparent">
+
+            <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:background="@color/app_ripple"
+                android:id="@+id/dialog"
+                android:orientation="vertical"
+                android:layout_centerInParent="true">
+
+              <LinearLayout
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="horizontal"
+                  android:id="@+id/dialogtitle">
+
+                  <ImageView
+                      android:layout_width="0dp"
+                      android:layout_weight="1"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/projectNameIcon"
+                      android:src="@drawable/ic_action_projectname"
+                      android:layout_gravity="center"/>
+
+                  <EditText
+                      android:layout_width="0dp"
+                      android:layout_weight="4"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/projectName"
+                      android:hint="@string/projectName"
+                      android:layout_gravity="center"
+                      android:textSize="@dimen/textSize"/>
+
+              </LinearLayout>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/projectmemberlabel"
+                    android:text="@string/projectmember"
+                    android:layout_marginBottom="@dimen/all_in_layout_paddingandmargin"
+                    android:layout_marginTop="@dimen/projectmemberlabelmargintop"
+                    android:layout_marginLeft="@dimen/projectmemberlabelmarginleft"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:paddingLeft="2dp"
+                    android:paddingRight="2dp"
+                    android:background="@color/underLineColor"
+                    android:minWidth="10dp"
+                    android:textSize="20sp"
+                    android:layout_margin="@dimen/underlineMatgin"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/dialogmember"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:id="@+id/dialogprojectnameicon"
+                        android:src="@drawable/ic_action_own"
+                        android:layout_marginLeft="@dimen/spinnerMargin"
+                        android:layout_gravity="center"/>
+
+                    <TextView
+                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="4"
+                        android:id="@+id/owner"
+                        android:text="@string/owner"
+                        android:textSize="@dimen/textSize"
+                        android:layout_marginLeft="@dimen/spinnerMargin"
+                        android:gravity="center_vertical"/>
+
+                    <ImageView
+                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:id="@+id/dialogprojectnownericon"
+                        android:src="@drawable/ic_action_owner"
+                        android:layout_gravity="center"/>
+                    </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:paddingLeft="2dp"
+                    android:id="@+id/underowner"
+                    android:paddingRight="2dp"
+                    android:background="@color/underLineColor"
+                    android:layout_marginBottom="@dimen/underlineMatgin"
+                    android:layout_marginTop="@dimen/underlineMatgin"
+                    android:layout_marginLeft="@dimen/underlineMatginLeft"
+                    android:minWidth="10dp"
+                    android:textSize="20sp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/dialogaddmember"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:id="@+id/dialogaddmembericon"
+                        android:src="@drawable/ic_action_addmember"
+                        android:layout_gravity="center"/>
+
+                    <EditText
+                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="4"
+                        android:hint="@string/addmember"
+                        android:id="@+id/addmember"
+                        android:textSize="@dimen/textSize"
+                        android:autoLink="all"
+                        android:textColor="@color/submitColor"
+                        android:gravity="center_vertical"/>
+                    </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/showmember"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:paddingLeft="2dp"
+                    android:paddingRight="2dp"
+                    android:background="@color/underLineColor"
+                    android:minWidth="10dp"
+                    android:layout_margin="@dimen/underlineMatgin"
+                    android:textSize="20sp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/projectddllabel"
+                    android:text="@string/ddl"
+                    android:textColor="@color/submitColor"
+                    android:layout_marginBottom="@dimen/all_in_layout_paddingandmargin"
+                    android:layout_marginTop="@dimen/projectmemberlabelmargintop"
+                    android:layout_marginLeft="@dimen/projectmemberlabelmarginleft"/>
+
+                <LinearLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:id="@+id/dialogokcancle"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/dialogmargin">
+
+
+
+                </LinearLayout>
+            </LinearLayout>
+
+
+
+
+</RelativeLayout>

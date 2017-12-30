@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:custom="http://schemas.android.com/tools"
+    android:padding="@dimen/activity_horizontal_margin"
+    android:layout_margin="@dimen/projectmargin"
+    android:id="@+id/card_view"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    app:cardCornerRadius="@dimen/cardCornerRadius"
+    app:cardElevation="@dimen/cardElevation"
+    android:layout_alignParentTop="true"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true">
+
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <FrameLayout
+                android:id="@+id/news_header"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/imageViewHeight"
+                android:orientation="vertical"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true">
+
+                <ImageView
+                    android:id="@+id/news_photo"
+                    android:scaleType="centerCrop"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/imageViewHeight"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"/>
+
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/news_title"
+                android:maxLines="1"
+                android:textSize="@dimen/textSize"
+                android:textColor="@color/colorBlack"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/projectTitle"
+                android:layout_below="@id/news_header"
+                android:padding="@dimen/text_padding"/>
+            <TextView
+                android:id="@+id/news_desc"
+                android:maxLines="2"
+                android:layout_below="@id/news_title"
+                android:textSize="@dimen/textSize"
+                android:layout_width="wrap_content"
+                android:hint="@string/projectDesc"
+                android:padding="@dimen/text_padding"
+                android:layout_height="wrap_content"/>
+
+
+            <com.daimajia.numberprogressbar.NumberProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/projectsProgress"
+                android:layout_below="@id/news_desc"
+                app:progress_unreached_bar_height="@dimen/progressbar_height"
+                app:progress_reached_bar_height="@dimen/progressbar_height"
+                android:layout_margin="@dimen/progressbar_margin"
+                />
+
+        </RelativeLayout>
+
+
+
+</android.support.v7.widget.CardView>
