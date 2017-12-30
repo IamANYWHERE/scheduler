@@ -24,13 +24,19 @@
         android:layout_margin="@dimen/meeting_info_card_margin"
         android:background="@color/color_meeting_info_card"
         app:cardCornerRadius="10dp"
-        app:cardElevation="10dp"
         android:padding="5dp">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <TextView
-                android:layout_gravity="center_vertical"
+                android:id="@+id/meeting_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:layout_marginLeft="@dimen/meeting_info_card_time_margin_left"
+                android:textColor="@android:color/black"/>
+            <TextView
+                android:layout_below="@id/meeting_name"
                 android:id="@+id/meeting_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -43,6 +49,7 @@
                 android:id="@+id/meeting_member"
                 android:layout_below="@id/meeting_time"
                 android:textSize="@dimen/meeting_info_card_member_size"
+                android:text="555555555"
                 android:layout_marginLeft="@dimen/meeting_info_card_member_margin_left"
                 android:layout_marginTop="@dimen/meeting_info_card_member_margin_top"/>
         </RelativeLayout>

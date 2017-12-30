@@ -33,6 +33,10 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         this.isLeader=isleader;
     }
 
+    public void setSprints(List<Sprint> sprints){
+        mList=sprints;
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ViewHolder viewHolder= new ViewHolder(LayoutInflater.from(mContext).inflate(R.layout.unburned_sprint,parent,false));

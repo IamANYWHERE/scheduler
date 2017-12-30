@@ -11,14 +11,16 @@ public class Project {
 
     private String projectName;
 
-    private Date ddl;
+    private long ddl;
 
     private Integer progress;
 
-    public Project(Integer id,String projectName,Date ddl,Integer progress){
+    private String username;
+
+    public Project(Integer id,String projectName,Date ddl,Integer progress,String username){
         this.id=id;
         this.projectName=projectName;
-        this.ddl=ddl;
+        this.ddl=ddl.getTime();
         this.progress=progress;
     }
 
@@ -38,11 +40,11 @@ public class Project {
         this.projectName = projectName;
     }
 
-    public Date getDdl() {
+    public long getDdl() {
         return ddl;
     }
 
-    public void setDdl(Date ddl) {
+    public void setDdl(long ddl) {
         this.ddl = ddl;
     }
 
@@ -52,5 +54,13 @@ public class Project {
 
     public void setProgress(Integer progress) {
         this.progress = progress;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

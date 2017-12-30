@@ -7,6 +7,7 @@ import com.toplyh.android.scheduler.service.entity.remote.PJS;
 import com.toplyh.android.scheduler.service.entity.remote.Project;
 import com.toplyh.android.scheduler.service.entity.remote.ProjectAndMember;
 import com.toplyh.android.scheduler.service.entity.remote.Projects;
+import com.toplyh.android.scheduler.service.entity.remote.Sprint;
 import com.toplyh.android.scheduler.service.entity.remote.UpdateCount;
 import com.toplyh.android.scheduler.service.entity.state.Token;
 
@@ -41,6 +42,9 @@ public interface RetrofitService {
 
     @POST("project/addProjectAndMember")
     Observable<HttpsResult<String>> newProject(@Body ProjectAndMember projectAndMember);
+
+    @GET("sprint/show-by-project-and-status")
+    Observable<HttpsResult<List<Sprint>>> getSprintByProjectAndStatus(@Query(value = "projectId") Integer projectId,@Query(value = "status")String status);
 
 
     @POST("hello-convert-and-send")

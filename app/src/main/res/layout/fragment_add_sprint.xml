@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/sprint_line_1">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:id="@+id/sprint_name_image"
+            android:src="@drawable/ic_sprint_name"
+            android:layout_gravity="center"/>
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:layout_height="wrap_content"
+            android:id="@+id/sprint_name"
+            android:hint="@string/sprint_name"
+            android:layout_gravity="center"
+            android:textSize="@dimen/textSize"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/sprint_line_2">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:id="@+id/sprint_content_image"
+            android:src="@drawable/ic_sprint_content"
+            android:layout_gravity="center"/>
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:layout_height="wrap_content"
+            android:id="@+id/sprint_content"
+            android:hint="@string/sprint_content"
+            android:layout_gravity="center"
+            android:textSize="@dimen/textSize"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/sprint_line_3">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:id="@+id/sprint_worktime_image"
+            android:src="@drawable/ic_sprint_worktime"
+            android:layout_gravity="center"/>
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:layout_height="wrap_content"
+            android:id="@+id/sprint_worktime"
+            android:hint="@string/sprint_worktime"
+            android:layout_gravity="center"
+            android:inputType="number"
+            android:textSize="@dimen/textSize"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/sprint_line_4">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:id="@+id/sprint_user_image"
+            android:src="@drawable/ic_sprint_user"
+            android:layout_gravity="center"/>
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:layout_height="wrap_content"
+            android:id="@+id/sprint_user"
+            android:hint="@string/sprint_user"
+            android:layout_gravity="center"
+            android:inputType="number"
+            android:textSize="@dimen/textSize"/>
+    </LinearLayout>
+
+    <DatePicker
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/sprint_date_picker"
+                android:calendarViewShown="false"
+                android:layout_gravity="center">
+
+    </DatePicker>
+</LinearLayout>

@@ -45,7 +45,7 @@
     <dimen name="submitModifyMarginTop">50dp</dimen>
     <dimen name="progressbar_margin">5dp</dimen>
     <dimen name="progressbar_height">5dp</dimen>
-    <dimen name="meeting_info_height">70dp</dimen>
+    <dimen name="meeting_info_height">90dp</dimen>
     <dimen name="meeting_info_timeline_margin_left">10dp</dimen>
     <dimen name="meeting_info_timeline_mark_size">15dp</dimen>
     <dimen name="meeting_info_timeline_line_size">2dp</dimen>

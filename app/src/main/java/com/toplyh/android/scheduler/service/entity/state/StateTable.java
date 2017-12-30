@@ -92,6 +92,8 @@ public class StateTable {
     //展示
     public static final int SPRINT_NO_SPRINT=902;
     //没有这个冲刺
+    public static final int SPRINT_NO_STATUS=904;
+    //这个状态没有sprint
 
     /**
      * WebSocket

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,6 +8,7 @@
     android:orientation="vertical">
 
     <RelativeLayout
+        android:id="@+id/state_bar"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:background="@color/color_48baf3">
@@ -76,5 +77,22 @@
         </RadioGroup>
 
     </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/sprint_recycler_view_container"
+        android:layout_below="@id/state_bar"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-</LinearLayout>
+    </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/add_sprint"
+        android:src="@drawable/ic_sprint_create"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="23dp"/>
+
+</RelativeLayout>

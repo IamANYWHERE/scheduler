@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.toplyh.android.scheduler.R;
 import com.toplyh.android.scheduler.service.entity.remote.Project;
+import com.toplyh.android.scheduler.service.utils.SharedPreferencesUtils;
 import com.toplyh.android.scheduler.service.utils.TimeHelper;
 import com.toplyh.android.scheduler.ui.activity.ProjectActivity;
 import com.toplyh.android.scheduler.ui.test.ReactiveNoteActivity;
@@ -64,12 +65,6 @@ public class HomePageAdapter extends RecyclerView.Adapter<HomePageAdapter.Projec
     public HomePageAdapter.ProjectsViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v= LayoutInflater.from(mContext).inflate(R.layout.home_page_item,viewGroup,false);
         ProjectsViewHolder projectsViewHolder=new ProjectsViewHolder(v);
-        projectsViewHolder.cardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mContext.startActivity(new Intent(mContext, ProjectActivity.class));
-            }
-        });
         return projectsViewHolder;
     }
 
@@ -77,11 +72,32 @@ public class HomePageAdapter extends RecyclerView.Adapter<HomePageAdapter.Projec
     public void onBindViewHolder(HomePageAdapter.ProjectsViewHolder personViewHolder, int i) {
         final int j=i;
         Project project=mProjectses.get(i);
-        int state= TimeHelper.getDateDiff(new Date(),project.getDdl());
+        int state= TimeHelper.getDateDiff(new Date(),new Date(project.getDdl()));
         setProjectImage(state,personViewHolder);
         personViewHolder.newsTitle.setText(mProjectses.get(i).getProjectName());
-        personViewHolder.newsDesc.setText("DDL:"+TimeHelper.getDateDiffDesc(new Date(),project.getDdl())+"天");
+        personViewHolder.newsDesc.setText("DDL:"+TimeHelper.getDateDiffDesc(new Date(),new Date(project.getDdl()))+"天");
         personViewHolder.mNumberProgressBar.setProgress(mProjectses.get(i).getProgress());
+        personViewHolder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean isleader;
+                Project p=mProjectses.get(j);
+                if (SharedPreferencesUtils.getParam(mContext,mContext.getString(R.string.username),"")
+                        .equals(p.getUsername())){
+                    isleader=true;
+                }else {
+                    isleader=false;
+                }
+                    Intent intent=ProjectActivity.newIntent(mContext,
+                            isleader,
+                            p.getId(),
+                            p.getProjectName(),
+                            p.getDdl(),
+                            p.getProgress(),
+                            p.getUsername());
+                mContext.startActivity(intent);
+            }
+        });
 
     }
 

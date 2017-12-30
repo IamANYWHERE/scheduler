@@ -1,6 +1,7 @@
 package com.toplyh.android.scheduler.service.manager;
 
 import android.content.Context;
+import android.content.Intent;
 
 import com.toplyh.android.scheduler.service.RetrofitHelper;
 import com.toplyh.android.scheduler.service.RetrofitService;
@@ -11,8 +12,11 @@ import com.toplyh.android.scheduler.service.entity.remote.PJS;
 import com.toplyh.android.scheduler.service.entity.remote.Project;
 import com.toplyh.android.scheduler.service.entity.remote.ProjectAndMember;
 import com.toplyh.android.scheduler.service.entity.remote.Projects;
+import com.toplyh.android.scheduler.service.entity.remote.Sprint;
 import com.toplyh.android.scheduler.service.entity.remote.UpdateCount;
 import com.toplyh.android.scheduler.service.entity.state.Token;
+
+import java.util.List;
 
 import rx.Observable;
 
@@ -49,5 +53,9 @@ public class RemoteManager {
 
     public Observable<HttpsResult<MsgCount>> getUserMsg(){
         return mRetrofitService.getUserMsg();
+    }
+
+    public Observable<HttpsResult<List<Sprint>>> getSprintByProjectAndStatus(Integer projectId,String status){
+        return mRetrofitService.getSprintByProjectAndStatus(projectId,status);
     }
 }

@@ -1,5 +1,10 @@
 package com.toplyh.android.scheduler.ui.activity;
 
+import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.content.Context;
+import android.content.Intent;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +16,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -23,21 +29,36 @@ import com.jpeng.jptabbar.JPTabBar;
 import com.toplyh.android.scheduler.R;
 import com.toplyh.android.scheduler.service.entity.remote.Meeting;
 import com.toplyh.android.scheduler.service.entity.remote.Member;
+import com.toplyh.android.scheduler.service.entity.remote.Project;
 import com.toplyh.android.scheduler.service.entity.remote.Sprint;
 
+import com.toplyh.android.scheduler.service.presenter.ProjectPresenter;
+import com.toplyh.android.scheduler.service.view.ProjectView;
 import com.toplyh.android.scheduler.ui.adapter.MeetingAdapter;
 import com.toplyh.android.scheduler.ui.adapter.MemberAdapter;
 import com.toplyh.android.scheduler.ui.adapter.MyRecyclerViewAdapter;
 import com.toplyh.android.scheduler.ui.adapter.MyViewPagerAdapter;
 import com.toplyh.android.scheduler.ui.fragment.AddMeetingFragment;
+import com.toplyh.android.scheduler.ui.fragment.AddSprintFragment;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ProjectActivity extends BaseActivity implements AddMeetingFragment.TimeCallback{
+public class ProjectActivity extends BaseActivity implements ProjectView,AddMeetingFragment.TimeCallback,AddSprintFragment.OnAddSprintFragmentInteractionListener{
+
+    private static final String IS_LEADER="leader";
+    private static final String PROJECT_ID="id";
+    private static final String PROJECT_NAME="name";
+    private static final String PROJECT_DATE="date";
+    private static final String PROJECT_PROGRESS="progress";
+    private static final String PROJECT_USERNAME="username";
+
+    private ProjectPresenter mProjectPresenter;
 
     private Boolean isLeader;
+
+    private Project mProject;
 
     private JPTabBar mTabbar;
     //下面bar
@@ -70,6 +91,8 @@ public class ProjectActivity extends BaseActivity implements AddMeetingFragment.
     private FloatingActionButton actionButton1;
     private FloatingActionButton actionButton2;
 
+    private static final String ADD_MEETING_FRAGMENT="add_meeting";
+
     //成员界面
     private List<Member> memberList = new ArrayList<>();
     private RecyclerView memberRecyclerView;
@@ -90,9 +113,29 @@ public class ProjectActivity extends BaseActivity implements AddMeetingFragment.
     RadioButton top_rg_c;
     RadioButton top_rg_d;
     private RecyclerView mRecyclerView;
+    private SwipeRefreshLayout mSprintRefresh;
+    private MyRecyclerViewAdapter mSprintAdapter;
     private List<Sprint> mSprintList = new ArrayList<>();
+    private android.support.design.widget.FloatingActionButton fabNewSprint;
+    private LinearLayout sprintContainer;
+    private static final String ADD_SPRINT_FRAGMENT="add_sprint";
 
-
+    public static Intent newIntent(Context context,
+                                   boolean isLeader,
+                                   Integer id,
+                                   String name,
+                                   long date,
+                                   Integer progress,
+                                   String username){
+        Intent intent=new Intent(context,ProjectActivity.class);
+        intent.putExtra(IS_LEADER,isLeader);
+        intent.putExtra(PROJECT_ID,id);
+        intent.putExtra(PROJECT_NAME,name);
+        intent.putExtra(PROJECT_DATE,date);
+        intent.putExtra(PROJECT_PROGRESS,progress);
+        intent.putExtra(PROJECT_USERNAME,username);
+        return intent;
+    }
     @Override
     protected void initView() {
         setContentView(R.layout.activity_project);
@@ -122,7 +165,21 @@ public class ProjectActivity extends BaseActivity implements AddMeetingFragment.
 
     @Override
     protected void initData() {
-        isLeader=false;
+        fabNewSprint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm=getFragmentManager();
+                AddSprintFragment fragment=new AddSprintFragment();
+                fragment.show(fm,ADD_SPRINT_FRAGMENT);
+            }
+        });
+        mProjectPresenter=new ProjectPresenter(this,this);
+        isLeader=getIntent().getBooleanExtra(IS_LEADER,false);
+        mProject=new Project(getIntent().getIntExtra(PROJECT_ID,0),
+                getIntent().getStringExtra(PROJECT_NAME),
+                new Date(getIntent().getLongExtra(PROJECT_DATE,new Date().getTime())),
+                getIntent().getIntExtra(PROJECT_PROGRESS,0),
+                getIntent().getStringExtra(PROJECT_USERNAME));
         initMeeting();
         meetingAdapter = new MeetingAdapter(meetingList);
         meetingRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -131,6 +188,14 @@ public class ProjectActivity extends BaseActivity implements AddMeetingFragment.
             @Override
             public void onRefresh() {
 
+            }
+        });
+        actionButton1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm=getFragmentManager();
+                AddMeetingFragment fragment=new AddMeetingFragment();
+                fragment.show(fm,ADD_MEETING_FRAGMENT);
             }
         });
 
@@ -178,8 +243,8 @@ public class ProjectActivity extends BaseActivity implements AddMeetingFragment.
         mTitleList=new ArrayList<>();
         mSprintList.add(new Sprint(2,"ww","eeeasds",new Date(),Sprint.SprintStatus.BB,4));
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        final MyRecyclerViewAdapter adapter = new MyRecyclerViewAdapter(this, mSprintList,isLeader);
-        mRecyclerView.setAdapter(adapter);
+        mSprintAdapter= new MyRecyclerViewAdapter(this, mSprintList,isLeader);
+        mRecyclerView.setAdapter(mSprintAdapter);
         fragments.add(view5);
         mTitleList.add("unburned");
         main_top_rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -187,8 +252,8 @@ public class ProjectActivity extends BaseActivity implements AddMeetingFragment.
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (checkedId == top_rg_a.getId())
                 {
-                    mSprintList.add(new Sprint(2,"asd","qwdasd",new Date(), Sprint.SprintStatus.BB,3));
-                    adapter.notifyDataSetChanged();
+                    /*mSprintList.add(new Sprint(2,"asd","qwdasd",new Date(), Sprint.SprintStatus.BB,3));
+                    mSprintAdapter.notifyDataSetChanged();*/
 
                 }
                 else if (checkedId == top_rg_b.getId())
@@ -208,6 +273,12 @@ public class ProjectActivity extends BaseActivity implements AddMeetingFragment.
                 .setSelectedIcons(R.drawable.tab1_selected, R.drawable.tab2_selected, R.drawable.tab3_selected, R.drawable.tab4_selected)
                 .generate();
         mTabbar.setContainer(mViewPager);
+        mSprintRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mProjectPresenter.getSprintByProjectAndStatus();
+            }
+        });
     }
 
     private void initViewPager(){
@@ -215,6 +286,8 @@ public class ProjectActivity extends BaseActivity implements AddMeetingFragment.
         views=new ArrayList<View>();
         LayoutInflater inflater=getLayoutInflater();
         view1=inflater.inflate(R.layout.project_detail, null);
+        fabNewSprint=(android.support.design.widget.FloatingActionButton) view1.findViewById(R.id.add_sprint);
+        sprintContainer=(LinearLayout)view1.findViewById(R.id.sprint_recycler_view_container);
         //会议界面
         view2=inflater.inflate(R.layout.project_meeting, null);
 
@@ -243,11 +316,14 @@ public class ProjectActivity extends BaseActivity implements AddMeetingFragment.
         top_rg_c=(RadioButton) view1.findViewById(R.id.btn_burned);
         top_rg_d=(RadioButton) view1.findViewById(R.id.btn_ashed);
         view5=inflater.inflate(R.layout.fragment_state, null);
-        mRecyclerView = (RecyclerView) view5.findViewById(R.id.recycler_view);
+        mRecyclerView = (RecyclerView) view5.findViewById(R.id.sprint_recycler_view);
+        mSprintRefresh=(SwipeRefreshLayout)view5.findViewById(R.id.sprint_refresh);
+        sprintContainer.addView(view5);
+
     }
     private void initMeeting() {
         meetingList.add(new Meeting(new Date(),2,"吃饭",new ArrayList<String>()));
-        meetingList.add(new Meeting(new Date(),3,"吃屎",new ArrayList<String>()));
+        meetingList.add(new Meeting(new Date(),3,"麻辣烫",new ArrayList<String>()));
         meetingList.add(new Meeting(new Date(),2,"吃蛋糕",new ArrayList<String>()));
     }
     private void initMember() {
@@ -264,5 +340,53 @@ public class ProjectActivity extends BaseActivity implements AddMeetingFragment.
     @Override
     public void sendDateAndTime(Date date) {
         this.date=date;
+    }
+
+    @Override
+    public void onFragmentInteraction(Sprint sprint) {
+
+    }
+
+    @Override
+    public void showDialog() {
+
+    }
+
+    @Override
+    public void cancelDialog() {
+
+    }
+
+    @Override
+    public void toastMessage(String msg) {
+        Toast.makeText(ProjectActivity.this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public Integer getProjectId() {
+        return mProject.getId();
+    }
+
+    @Override
+    public Sprint.SprintStatus getStatus() {
+        return Sprint.SprintStatus.BB;
+    }
+
+    @Override
+    public void showSprintRefreshDialog() {
+        mSprintRefresh.setRefreshing(true);
+    }
+
+    @Override
+    public void cancelSprintRefreshDialog() {
+        mSprintRefresh.setRefreshing(false);
+    }
+
+    @Override
+    public void initSprintView(List<Sprint> projects) {
+        mSprintList=projects;
+        mSprintAdapter.setSprints(mSprintList);
+
+        mSprintAdapter.notifyDataSetChanged();
     }
 }

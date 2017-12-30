@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,16 +51,32 @@ public class AddMeetingFragment extends DialogFragment {
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
+        int hour=calendar.get(Calendar.HOUR_OF_DAY);
+        int minute=calendar.get(Calendar.MINUTE);
         datePicker.init(year, month, day, null);
         timePicker.setIs24HourView(true);
+        if (Build.VERSION.SDK_INT<23){
+            timePicker.setCurrentHour(Integer.valueOf(hour));
+            timePicker.setCurrentMinute(Integer.valueOf(minute));
+        }else {
+            timePicker.setHour(hour);
+            timePicker.setMinute(minute);
+        }
         builder.setView(view).setPositiveButton("确认", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 int year = datePicker.getYear();
                 int month = datePicker.getMonth();
                 int day = datePicker.getDayOfMonth();
-                int hour = timePicker.getCurrentHour();
-                int minute = timePicker.getCurrentMinute();
+                int hour;
+                int minute;
+                if (Build.VERSION.SDK_INT<23){
+                    hour=timePicker.getCurrentHour();
+                    minute=timePicker.getCurrentMinute();
+                }else {
+                    hour=timePicker.getHour();
+                    minute=timePicker.getMinute();
+                }
                 calendar.set(year, month, day, hour, minute);
                 Date currentDate = calendar.getTime();
                 callbackValue.sendDateAndTime(currentDate);

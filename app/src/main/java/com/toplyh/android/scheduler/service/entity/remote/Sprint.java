@@ -22,6 +22,8 @@ public class Sprint {
 
     private Integer workTime;
 
+    private String username;
+
     public Sprint(){
 
     }
@@ -81,5 +83,13 @@ public class Sprint {
 
     public void setWorkTime(Integer workTime) {
         this.workTime = workTime;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

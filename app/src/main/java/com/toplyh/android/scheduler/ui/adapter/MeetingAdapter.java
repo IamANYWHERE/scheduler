@@ -51,6 +51,10 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHold
             holder.timelineView.setMarker(ContextCompat.getDrawable(context,R.drawable.ic_marker), ContextCompat.getColor(context,R.color.color_gray_dark));
         }
         holder.dateView.setText(TimeHelper.parseDateSimple(new Date(meeting.getDate()),"hh:mm a,dd-MMM-yyyy"));
+        holder.nameView.setText(meeting.getName());
+        for (String s: meeting.getMembers()) {
+            holder.memberView.setText(holder.memberView.getText()+s+";");
+        }
     }
 
     @Override
@@ -65,6 +69,7 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHold
 
     static class ViewHolder extends RecyclerView.ViewHolder{
         TimelineView timelineView;
+        TextView nameView;
         TextView dateView;
         TextView memberView;
         CardView cardView;
@@ -72,6 +77,7 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHold
         public ViewHolder(View view,int viewType){
             super(view);
             timelineView=(TimelineView)view.findViewById(R.id.time_marker);
+            nameView=(TextView)view.findViewById(R.id.meeting_name);
             dateView=(TextView)view.findViewById(R.id.meeting_time);
             memberView=(TextView)view.findViewById(R.id.meeting_member);
             cardView=(CardView)view.findViewById(R.id.meeting_cardview);

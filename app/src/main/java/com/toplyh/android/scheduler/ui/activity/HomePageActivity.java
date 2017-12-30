@@ -14,10 +14,12 @@ import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -56,6 +58,7 @@ public class HomePageActivity extends BaseActivity implements HomePageView,AddPr
     private RecyclerView mRecyclerView;
     private HomePageAdapter mAdapter;
     private List<Project> mProjects;
+    private List<Project> mSearchProjects;
 
     private TextView mTagsText;
     private ImageView mToolBarImageView;
@@ -69,6 +72,7 @@ public class HomePageActivity extends BaseActivity implements HomePageView,AddPr
     private SwipeRefreshLayout mRefreshLayout;
 
     private static final String ADDPROJECTDIALOGFRAGMENT = "addprojectdialogfragment";
+
 
 
     @Override
@@ -125,7 +129,8 @@ public class HomePageActivity extends BaseActivity implements HomePageView,AddPr
             String name=projects.getSelfProjects().get(i).getProjectName();
             Date date=new Date(projects.getSelfProjects().get(i).getDdl());
             Integer progress=projects.getSelfProjects().get(i).getProgress();
-            Project project=new Project(id,name,date,progress);
+            String username=projects.getSelfProjects().get(i).getUsername();
+            Project project=new Project(id,name,date,progress,username);
             selfProjects.add(project);
         }
         List<Project> otherProjects=new ArrayList<>();
@@ -134,7 +139,8 @@ public class HomePageActivity extends BaseActivity implements HomePageView,AddPr
             String name=projects.getOtherProjects().get(i).getProjectName();
             Date date=new Date(projects.getOtherProjects().get(i).getDdl());
             Integer progress=projects.getOtherProjects().get(i).getProgress();
-            Project project=new Project(id,name,date,progress);
+            String username=projects.getOtherProjects().get(i).getUsername();
+            Project project=new Project(id,name,date,progress,username);
             otherProjects.add(project);
         }
         mProjects.addAll(selfProjects);
@@ -158,6 +164,7 @@ public class HomePageActivity extends BaseActivity implements HomePageView,AddPr
                 mToolBarTitleTextView.setVisibility(View.VISIBLE);
             } else {
                 mEditText.getText().clear();
+                showSearchProjects(mProjects);
             }
         }
         @Override
@@ -177,7 +184,7 @@ public class HomePageActivity extends BaseActivity implements HomePageView,AddPr
             int option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                     | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
             decorView.setSystemUiVisibility(option);
-            getWindow().setNavigationBarColor(Color.TRANSPARENT);
+            //getWindow().setNavigationBarColor(Color.TRANSPARENT);
             getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
 
@@ -250,6 +257,33 @@ public class HomePageActivity extends BaseActivity implements HomePageView,AddPr
                 mHomePagePresenter.getProjects();
             }
         });
+
+        mEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEND
+                        || actionId == EditorInfo.IME_ACTION_DONE
+                        || (event != null && KeyEvent.KEYCODE_ENTER == event.getKeyCode() && KeyEvent.ACTION_DOWN == event.getAction())) {
+
+
+                    String projectName=mEditText.getText().toString();
+                    for (Project project:mProjects) {
+                        if(project.getProjectName().equals(projectName)){
+                            mSearchProjects=new ArrayList<>();
+                            mSearchProjects.add(project);
+                            showSearchProjects(mSearchProjects);
+                        }
+                    }
+
+                }
+                return false;
+            }
+        });
+    }
+
+    private void showSearchProjects(List<Project> projects){
+        mAdapter.setProjectses(projects);
+        mAdapter.notifyDataSetChanged();
     }
 
     private void showProjects(){

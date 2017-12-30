@@ -1,8 +1,11 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <DatePicker
         android:id="@+id/date_picker"
         android:calendarViewShown="false"
@@ -14,5 +17,5 @@
         android:id="@+id/time_picker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
-
-</RelativeLayout>
+    </RelativeLayout>
+</android.support.v4.widget.NestedScrollView>

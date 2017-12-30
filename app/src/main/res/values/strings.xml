@@ -85,4 +85,9 @@
     <string name="tab2">会议</string>
     <string name="tab3">成员</string>
     <string name="tab4">进度</string>
+
+    <string name="sprint_name">冲刺名称</string>
+    <string name="sprint_content">冲刺内容</string>
+    <string name="sprint_worktime">所需时间</string>
+    <string name="sprint_user">工作成员</string>
 </resources>

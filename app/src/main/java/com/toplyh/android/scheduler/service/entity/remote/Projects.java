@@ -41,6 +41,7 @@ public class Projects {
         private String projectName;
         private long ddl;
         private int progress;
+        private String username;
 
         public int getId() {
             return id;
@@ -72,6 +73,14 @@ public class Projects {
 
         public void setProgress(Integer progress) {
             this.progress = progress;
+        }
+
+        public String getUsername() {
+            return username;
+        }
+
+        public void setUsername(String username) {
+            this.username = username;
         }
     }
 
@@ -87,6 +96,8 @@ public class Projects {
         private String projectName;
         private long ddl;
         private int progress;
+        private String username;
+
 
         public int getId() {
             return id;
@@ -118,6 +129,14 @@ public class Projects {
 
         public void setProgress(Integer progress) {
             this.progress = progress;
+        }
+
+        public String getUsername() {
+            return username;
+        }
+
+        public void setUsername(String username) {
+            this.username = username;
         }
     }
 }
