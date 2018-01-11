@@ -90,4 +90,10 @@
     <string name="sprint_content">冲刺内容</string>
     <string name="sprint_worktime">所需时间</string>
     <string name="sprint_user">工作成员</string>
+
+    <string name="meeting_name">会议名称</string>
+    <string name="meeting_member">添加成员</string>
+
+    <string name="user_info">用户信息</string>
+    <string name="project_toolbar">项目信息</string>
 </resources>

@@ -1,7 +1,5 @@
 package com.toplyh.android.scheduler.service.entity.remote;
 
-import com.toplyh.android.scheduler.ui.adapter.MeetingAdapter;
-
 import java.util.Date;
 import java.util.List;
 
@@ -11,7 +9,7 @@ import java.util.List;
 
 public class Meeting {
 
-    private Integer id;
+    private Integer Id;
 
     private long date;
 
@@ -20,21 +18,21 @@ public class Meeting {
     private List<String> members;
 
     public Meeting(Date date,
-                   Integer id,
+                   Integer Id,
                    String name,
                    List<String> members){
         this.date=date.getTime();
-        this.id=id;
+        this.Id = Id;
         this.name=name;
         this.members=members;
 
     }
     public Integer getId() {
-        return id;
+        return Id;
     }
 
     public void setId(Integer id) {
-        this.id = id;
+        this.Id = id;
     }
 
     public long getDate() {

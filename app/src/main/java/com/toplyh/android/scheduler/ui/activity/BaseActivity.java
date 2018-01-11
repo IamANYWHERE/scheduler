@@ -34,6 +34,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initView();
+        addToolbar();
         initData();
     }
 

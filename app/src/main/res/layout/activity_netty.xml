@@ -15,6 +15,11 @@
         android:text="start"
         android:textSize="16sp"/>
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/upload_file"/>
+
     <TextView
         android:id="@+id/text_netty"
         android:layout_width="match_parent"

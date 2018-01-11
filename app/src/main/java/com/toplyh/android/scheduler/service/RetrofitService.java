@@ -1,7 +1,11 @@
 package com.toplyh.android.scheduler.service;
 
+import com.toplyh.android.scheduler.service.entity.remote.AddSprint;
 import com.toplyh.android.scheduler.service.entity.remote.Count;
 import com.toplyh.android.scheduler.service.entity.remote.HttpsResult;
+import com.toplyh.android.scheduler.service.entity.remote.Meeting;
+import com.toplyh.android.scheduler.service.entity.remote.Member;
+import com.toplyh.android.scheduler.service.entity.remote.MetAndMem;
 import com.toplyh.android.scheduler.service.entity.remote.MsgCount;
 import com.toplyh.android.scheduler.service.entity.remote.PJS;
 import com.toplyh.android.scheduler.service.entity.remote.Project;
@@ -12,10 +16,18 @@ import com.toplyh.android.scheduler.service.entity.remote.UpdateCount;
 import com.toplyh.android.scheduler.service.entity.state.Token;
 
 import java.util.List;
+import java.util.Map;
 
+import okhttp3.Call;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
+import retrofit2.http.PartMap;
 import retrofit2.http.Query;
 import rx.Observable;
 
@@ -46,7 +58,32 @@ public interface RetrofitService {
     @GET("sprint/show-by-project-and-status")
     Observable<HttpsResult<List<Sprint>>> getSprintByProjectAndStatus(@Query(value = "projectId") Integer projectId,@Query(value = "status")String status);
 
+    @POST("sprint/add")
+    Observable<HttpsResult<String>> newSprint(@Body AddSprint addSprint);
+
+    @GET("sprint/change/status")
+    Observable<HttpsResult<String>> changeSprintStatus(@Query(value = "sprintId") Integer sprintId,@Query(value = "status") String status);
+
+    @GET("meeting/show")
+    Observable<HttpsResult<List<MetAndMem>>> getMeetings(@Query(value = "projectId") Integer projectId);
+
+    @POST("meeting/addMeetingAndMember")
+    Observable<HttpsResult<String>> newMeeting(@Body MetAndMem metAndMem);
+
+    @GET("member/show")
+    Observable<HttpsResult<List<Member>>> getMembers(@Query(value = "projectId") Integer projectId);
+
+    @GET("project/progress")
+    Observable<HttpsResult<Integer>> getProgress(@Query(value = "projectId") Integer projectId);
 
     @POST("hello-convert-and-send")
     Observable<Void> sendRestEcho(@Query("msg") String message);
+
+    @Multipart
+    @POST("")
+    public String uploadFile(@Part("file") RequestBody body, @PartMap Map<String,Object> map);
+
+    @Multipart
+    @POST("upload")
+    Observable<String> upload(@Part MultipartBody.Part file);
 }

@@ -25,7 +25,8 @@
         app:progressWidth="12dp"
         app:step="1"
         app:textColor="#A1D9FF"
-        app:textSize="72sp" />
+        app:textSize="72sp"
+        app:points="100"/>
     </android.support.v4.widget.SwipeRefreshLayout>
 
 </RelativeLayout>

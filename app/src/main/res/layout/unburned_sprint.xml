@@ -4,10 +4,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rl_mobile_memory"
     android:layout_width="match_parent"
-    android:layout_height="70dp"
-    android:layout_marginTop="30dp"
+    android:layout_height="@dimen/sprint_item_height"
+    android:layout_marginTop="@dimen/sprint_item_margin_top"
     android:background="@color/md_white_1000"
-    android:padding="10dp">
+    android:padding="@dimen/sprint_item_padding">
 
     <TextView
         android:id="@+id/spring_name"

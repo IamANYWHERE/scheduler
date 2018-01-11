@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -72,6 +73,7 @@ public class AddProjectDialogFragment extends DialogFragment{
         ddlText=(TextView)view.findViewById(R.id.projectddllabel);
         projectNameText=(EditText)view.findViewById(R.id.projectName);
         mProject=new ProjectAndMember();
+        mProject.setDdl(0);
 
         ddlText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,14 +109,15 @@ public class AddProjectDialogFragment extends DialogFragment{
                     Toast.makeText(getActivity(), "ddl为空！", Toast.LENGTH_SHORT).show();
                 }else{
                     mListener.onFragmentInteraction(mProject);
-                    AddProjectDialogFragment.this.getDialog().cancel();
                 }
+                mListener.setShakeFalse();
             }
         });
 
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                AddProjectDialogFragment.this.getDialog().cancel();
+                Log.e("george","fragment members="+mProject.getMembers().size());
+                mListener.setShakeFalse();
             }
         });
         return builder.create();
@@ -144,6 +147,7 @@ public class AddProjectDialogFragment extends DialogFragment{
 
     public interface OnAddFragmentInteractionListener {
         // TODO: Update argument type and name
+        void setShakeFalse();
         void onFragmentInteraction(ProjectAndMember projectAndMember);
     }
 

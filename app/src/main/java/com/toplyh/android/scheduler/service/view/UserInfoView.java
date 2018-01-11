@@ -11,4 +11,5 @@ public interface UserInfoView extends View{
     String getNewRepeatPassword();
     void toLoginActivity();
     void setNickName(String name);
+    String getFilePath();
 }

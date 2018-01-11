@@ -32,6 +32,10 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHold
         ACTIVE,
         INACTIVE
     }
+
+    public void setMeetingList(List<Meeting> meetingList){
+        this.meetingList=meetingList;
+    }
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         context=parent.getContext();
@@ -52,6 +56,7 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHold
         }
         holder.dateView.setText(TimeHelper.parseDateSimple(new Date(meeting.getDate()),"hh:mm a,dd-MMM-yyyy"));
         holder.nameView.setText(meeting.getName());
+        holder.memberView.setText("");
         for (String s: meeting.getMembers()) {
             holder.memberView.setText(holder.memberView.getText()+s+";");
         }

@@ -1,6 +1,9 @@
 package com.toplyh.android.scheduler.service.presenter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.util.Log;
 
 import com.toplyh.android.scheduler.service.ApiCallBack;
@@ -9,6 +12,13 @@ import com.toplyh.android.scheduler.service.entity.remote.MsgCount;
 import com.toplyh.android.scheduler.service.entity.remote.UpdateCount;
 import com.toplyh.android.scheduler.service.entity.state.StateTable;
 import com.toplyh.android.scheduler.service.view.UserInfoView;
+import com.toplyh.android.scheduler.ui.test.LoginActivity;
+
+import java.io.File;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 /**
  * Created by 我 on 2017/12/29.
@@ -40,18 +50,16 @@ public class UserInfoPresenter extends BasePresenter<UserInfoView> {
                 }else if (model.getState()==StateTable.AUTHENTICATION_TOKEN_ERROR){
                     mUserInfoView.toastMessage("请重新登录");
                 }
-                mUserInfoView.cancelDialog();
             }
 
             @Override
             public void onFailure(String msg) {
                 Log.e("dandy", "onFailure: "+msg );
-                mUserInfoView.cancelDialog();
             }
 
             @Override
             public void onFinish() {
-
+                mUserInfoView.cancelDialog();
             }
         };
         addSubscription(mRemoteManager.getUserMsg(),subscriber);
@@ -97,18 +105,16 @@ public class UserInfoPresenter extends BasePresenter<UserInfoView> {
                 }else if (model.getState()==StateTable.AUTHENTICATION_TOKEN_ERROR){
                     mUserInfoView.toastMessage("请重新登录");
                 }
-                mUserInfoView.cancelDialog();
             }
 
             @Override
             public void onFailure(String msg) {
                 Log.e("dandy", "onFailure: "+msg );
-                mUserInfoView.cancelDialog();
             }
 
             @Override
             public void onFinish() {
-
+                mUserInfoView.cancelDialog();
             }
         };
 
@@ -117,5 +123,42 @@ public class UserInfoPresenter extends BasePresenter<UserInfoView> {
         updateCount.setCurrentPassword(currentPassword);
         updateCount.setNewPassword(newPassword);
         addSubscription(mRemoteManager.updateUser(updateCount),subscriber);
+    }
+
+    public void upload(){
+        String filePath=mUserInfoView.getFilePath();
+        File file=new File(filePath);
+        if (!file.exists()){
+            mUserInfoView.toastMessage("文件不存在");
+            return;
+        }
+
+        RequestBody requesFile=RequestBody.create(MediaType.parse("multipart/form-data"),file);
+        MultipartBody.Part body=MultipartBody.Part.createFormData("file",file.getName(),requesFile);
+        String descriptionString = "hello,这是文件描述";
+        RequestBody description=RequestBody.create(MediaType.parse("multipart/form-data"),descriptionString);
+
+        ApiCallBack<String> subscriber=new ApiCallBack<String>() {
+            @Override
+            public void onSuccess(String model) {
+                mUserInfoView.toastMessage(model);
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                mUserInfoView.toastMessage(msg);
+            }
+
+            @Override
+            public void onFinish() {
+
+            }
+        };
+
+        addSubscription(mRemoteManager.upload(body),subscriber);
+    }
+
+    public void destroy(){
+        detachView();
     }
 }

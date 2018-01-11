@@ -11,6 +11,7 @@ import com.toplyh.android.scheduler.service.ApiCallBack;
 import com.toplyh.android.scheduler.service.entity.local.User;
 import com.toplyh.android.scheduler.service.entity.remote.Count;
 import com.toplyh.android.scheduler.service.entity.remote.HttpsResult;
+import com.toplyh.android.scheduler.service.entity.state.StateTable;
 import com.toplyh.android.scheduler.service.entity.state.Token;
 import com.toplyh.android.scheduler.service.manager.RemoteManager;
 import com.toplyh.android.scheduler.service.utils.SharedPreferencesUtils;
@@ -54,8 +55,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
             @Override
             public void onSuccess(HttpsResult<Token> model) {
                 Toast.makeText(mContext,"success",Toast.LENGTH_SHORT);
-                mLoginView.cancelDialog();
-                if (model.getState()==100){
+                if (model.getState()== StateTable.LOGIN_RIGHT){
                     //closeRetrofit();
                     mLoginView.toMainActivity();
                     saveUserToken(model,userName);
@@ -67,12 +67,12 @@ public class LoginPresenter extends BasePresenter<LoginView> {
             @Override
             public void onFailure(String msg) {
                 Log.e("dandy", "onFailure: "+msg );
-                mLoginView.cancelDialog();
+                mLoginView.toastMessage(msg);
             }
 
             @Override
             public void onFinish() {
-
+                mLoginView.cancelDialog();
             }
         };
 
@@ -83,6 +83,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
     }
 
     private void saveUserToken(HttpsResult<Token> token,String username){
+        Log.e("george","username="+username);
         SharedPreferencesUtils.setParam(mContext,
                 mContext.getString(R.string.token)
                 ,token.getData().getToken());

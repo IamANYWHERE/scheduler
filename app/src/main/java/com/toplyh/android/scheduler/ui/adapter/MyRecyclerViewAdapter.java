@@ -26,11 +26,13 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     private Context mContext;
     private List<Sprint> mList;
     private Boolean isLeader;
+    private OnSprintChangeStatusListener mListener;
 
-    public MyRecyclerViewAdapter(Context context, List<Sprint> list,Boolean isleader){
+    public MyRecyclerViewAdapter(Context context, List<Sprint> list,Boolean isleader,OnSprintChangeStatusListener listener){
         this.mContext=context;
         this.mList=list;
         this.isLeader=isleader;
+        this.mListener=listener;
     }
 
     public void setSprints(List<Sprint> sprints){
@@ -73,6 +75,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         @Override
         public void onClick(View v) {
             int position=ViewHolder.this.getLayoutPosition();
+            mListener.onSprintChangeInteraction(position );
         }
     }
 
@@ -101,5 +104,8 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         }
     }
 
+    public interface OnSprintChangeStatusListener{
+        void onSprintChangeInteraction(int position);
+    }
 
 }

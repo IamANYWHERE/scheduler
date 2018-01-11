@@ -11,7 +11,7 @@
         android:id="@+id/state_bar"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:background="@color/color_48baf3">
+        android:background="@color/color_yellow">
 
         <RadioGroup
             android:id="@+id/main_top_rg"
@@ -31,7 +31,7 @@
                 android:gravity="center"
                 android:text="@string/unburned"
                 android:textColor="@drawable/top_r_text"
-                android:textColorHighlight="@color/color_48baf3"
+                android:textColorHighlight="@color/color_yellow"
                 android:textSize="14dp"/>
 
             <RadioButton
@@ -44,7 +44,7 @@
                 android:gravity="center"
                 android:text="@string/burning"
                 android:textColor="@drawable/top_r_text"
-                android:textColorHighlight="@color/color_48baf3"
+                android:textColorHighlight="@color/color_yellow"
                 android:textSize="14dp"/>
 
 
@@ -58,7 +58,7 @@
                 android:gravity="center"
                 android:text="@string/burned"
                 android:textColor="@drawable/top_r_text"
-                android:textColorHighlight="@color/color_48baf3"
+                android:textColorHighlight="@color/color_yellow"
                 android:textSize="14dp"/>
 
 
@@ -72,7 +72,7 @@
                 android:gravity="center"
                 android:text="@string/ashed"
                 android:textColor="@drawable/top_r_text"
-                android:textColorHighlight="@color/color_48baf3"
+                android:textColorHighlight="@color/color_yellow"
                 android:textSize="14dp"/>
         </RadioGroup>
 
@@ -93,6 +93,8 @@
         android:src="@drawable/ic_sprint_create"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_margin="23dp"/>
+        android:layout_margin="23dp"
+        app:theme="@style/MyFloatingButton"
+        app:rippleColor="@color/color_yellow"/>
 
 </RelativeLayout>

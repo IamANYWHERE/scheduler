@@ -49,7 +49,6 @@
                 android:id="@+id/meeting_member"
                 android:layout_below="@id/meeting_time"
                 android:textSize="@dimen/meeting_info_card_member_size"
-                android:text="555555555"
                 android:layout_marginLeft="@dimen/meeting_info_card_member_margin_left"
                 android:layout_marginTop="@dimen/meeting_info_card_member_margin_top"/>
         </RelativeLayout>

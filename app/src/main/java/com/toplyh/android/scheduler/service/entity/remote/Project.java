@@ -22,6 +22,7 @@ public class Project {
         this.projectName=projectName;
         this.ddl=ddl.getTime();
         this.progress=progress;
+        this.username=username;
     }
 
     public Integer getId() {

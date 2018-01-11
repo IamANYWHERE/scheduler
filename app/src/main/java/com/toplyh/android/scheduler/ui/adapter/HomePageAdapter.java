@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -88,6 +89,7 @@ public class HomePageAdapter extends RecyclerView.Adapter<HomePageAdapter.Projec
                 }else {
                     isleader=false;
                 }
+                Log.e("george",p.getUsername()+"  "+SharedPreferencesUtils.getParam(mContext,mContext.getString(R.string.username),"")+"  "+isleader);
                     Intent intent=ProjectActivity.newIntent(mContext,
                             isleader,
                             p.getId(),

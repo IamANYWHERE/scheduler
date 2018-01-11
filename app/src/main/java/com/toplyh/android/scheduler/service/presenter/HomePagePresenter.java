@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.toplyh.android.scheduler.app.App;
 import com.toplyh.android.scheduler.service.ApiCallBack;
 import com.toplyh.android.scheduler.service.entity.remote.Count;
 import com.toplyh.android.scheduler.service.entity.remote.HttpsResult;
@@ -16,6 +17,10 @@ import com.toplyh.android.scheduler.service.view.HomePageView;
 
 import java.util.Date;
 import java.util.List;
+
+import rx.Observable;
+import rx.Subscriber;
+import rx.functions.Action1;
 
 /**
  * Created by 我 on 2017/12/28.
@@ -42,18 +47,17 @@ public class HomePagePresenter extends BasePresenter<HomePageView> {
                 }else if (model.getState()==StateTable.AUTHENTICATION_TOKEN_ERROR){
                     mHomePageView.toastMessage("请重新登录");
                 }
-                mHomePageView.cancelDialog();
             }
 
             @Override
             public void onFailure(String msg) {
                 Log.e("dandy", "onFailure: "+msg );
-                mHomePageView.cancelDialog();
+                mHomePageView.toastMessage(msg);
             }
 
             @Override
             public void onFinish() {
-
+                mHomePageView.cancelDialog();
             }
         };
         addSubscription(mRemoteManager.getProjects(),subscriber);
@@ -61,7 +65,7 @@ public class HomePagePresenter extends BasePresenter<HomePageView> {
 
     public void newProject(){
         ProjectAndMember projectAndMember=mHomePageView.getProjectAndMember();
-
+        Log.e("george","members size="+projectAndMember.getMembers().size());
         ApiCallBack<HttpsResult<String>> subscriber=new ApiCallBack<HttpsResult<String>>() {
             @Override
             public void onSuccess(HttpsResult<String> model) {
@@ -88,7 +92,36 @@ public class HomePagePresenter extends BasePresenter<HomePageView> {
     }
 
 
+    public void shake(){
 
+        mHomePageView.setShake(true);
+        Observable observable=Observable.create(new Observable.OnSubscribe<Boolean>(){
+
+            @Override
+            public void call(Subscriber<? super Boolean> subscriber) {
+                mHomePageView.shake();
+                subscriber.onCompleted();
+            }
+        });
+
+        Subscriber<Boolean> subscriber=new Subscriber<Boolean>() {
+            @Override
+            public void onCompleted() {
+                mHomePageView.openProjectFragment();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(Boolean aBoolean) {
+            }
+        };
+
+        addSubscription(observable,subscriber);
+    }
 
     public void destroy(){
         detachView();

@@ -21,4 +21,7 @@ public interface HomePageView extends View {
     void toLoginPage();
     void initRecyclerView(Projects projects);
     ProjectAndMember getProjectAndMember();
+    void shake();
+    void setShake(Boolean b);
+    void openProjectFragment();
 }

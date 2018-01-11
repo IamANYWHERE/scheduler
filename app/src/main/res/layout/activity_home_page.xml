@@ -18,11 +18,11 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorPrimary"
+                android:background="@color/color_green_dark"
                 app:cancelIcon="@drawable/ic_close"
-                app:endColor="@color/colorEnd"
+                app:endColor="@color/color_yellow"
                 app:icon="@drawable/ic_search"
-                app:startColor="@color/colorStart"
+                app:startColor="@color/color_yellow_dark"
                 android:layout_gravity="center_vertical"
                 app:layout_scrollFlags="scroll|enterAlways|snap">
 
@@ -33,22 +33,22 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="0dp"
+                        android:layout_width="@dimen/home_page_toolbar_image_width"
                         android:layout_height="wrap_content"
                         android:id="@+id/toolbarImage"
-                        android:paddingTop="38dp"
+                        android:paddingTop="@dimen/home_page_toolbar_padding_top"
                         android:layout_weight="1"
-                        android:paddingLeft="15dp"
+                        android:paddingLeft="@dimen/home_page_toolbar_padding_left"
                         android:src="@drawable/ic_action_personalinfopage"/>
                     <TextView
                         android:layout_height="wrap_content"
-                        android:layout_width="0dp"
+                        android:layout_width="@dimen/home_page_toolbar_title_width"
                         android:id="@+id/toolbarTitle"
                         android:text="正在进行的项目"
                         android:layout_gravity="center"
                         android:layout_weight="2"
-                        android:paddingTop="38dp"
-                        android:paddingLeft="50dp"
+                        android:paddingTop="@dimen/home_page_toolbar_title_padding_top"
+                        android:paddingLeft="@dimen/home_page_toolbar_title_padding_left"
                         android:pointerIcon="arrow"
                         android:textSize="@dimen/textSize"
                         android:textColor="@android:color/white"/>
@@ -75,7 +75,7 @@
             android:layout_gravity="bottom|right"
             android:src="@drawable/fab_add"
             android:theme="@style/MyFloatingButton"
-            app:rippleColor="@color/indigo"
+            app:rippleColor="@color/color_yellow"
             android:layout_marginBottom="@dimen/fabmargin"
             android:layout_marginRight="@dimen/fabmargin"/>
 
@@ -90,7 +90,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:headerLayout="@layout/navi_head"
-        android:background="@color/sidebg"
+        android:background="@color/white_pressed"
         app:menu="@menu/menu_drawer"/>
 </android.support.v4.widget.DrawerLayout >
 

@@ -39,6 +39,10 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder
         }
     }
 
+    public void setMemberList(List<Member> memberList){
+        this.memberList=memberList;
+    }
+
     public MemberAdapter(List<Member> members){
         memberList=members;
     }

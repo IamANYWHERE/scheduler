@@ -1,16 +1,13 @@
 package com.toplyh.android.scheduler.ui.activity;
 
-import android.app.Activity;
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
@@ -19,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dualcores.swagpoints.SwagPoints;
@@ -29,10 +25,12 @@ import com.jpeng.jptabbar.JPTabBar;
 import com.toplyh.android.scheduler.R;
 import com.toplyh.android.scheduler.service.entity.remote.Meeting;
 import com.toplyh.android.scheduler.service.entity.remote.Member;
+import com.toplyh.android.scheduler.service.entity.remote.MetAndMem;
 import com.toplyh.android.scheduler.service.entity.remote.Project;
 import com.toplyh.android.scheduler.service.entity.remote.Sprint;
 
 import com.toplyh.android.scheduler.service.presenter.ProjectPresenter;
+import com.toplyh.android.scheduler.service.utils.TimeHelper;
 import com.toplyh.android.scheduler.service.view.ProjectView;
 import com.toplyh.android.scheduler.ui.adapter.MeetingAdapter;
 import com.toplyh.android.scheduler.ui.adapter.MemberAdapter;
@@ -42,10 +40,15 @@ import com.toplyh.android.scheduler.ui.fragment.AddMeetingFragment;
 import com.toplyh.android.scheduler.ui.fragment.AddSprintFragment;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-public class ProjectActivity extends BaseActivity implements ProjectView,AddMeetingFragment.TimeCallback,AddSprintFragment.OnAddSprintFragmentInteractionListener{
+public class ProjectActivity extends BaseActivity implements ProjectView,
+        AddMeetingFragment.TimeCallback,
+        AddSprintFragment.OnAddSprintFragmentInteractionListener,
+        MyRecyclerViewAdapter.OnSprintChangeStatusListener{
 
     private static final String IS_LEADER="leader";
     private static final String PROJECT_ID="id";
@@ -89,14 +92,14 @@ public class ProjectActivity extends BaseActivity implements ProjectView,AddMeet
     private Date date;
     private FloatingActionsMenu floatingActionsMenu;
     private FloatingActionButton actionButton1;
-    private FloatingActionButton actionButton2;
+
+    private MetAndMem newMetAndMem;
 
     private static final String ADD_MEETING_FRAGMENT="add_meeting";
 
     //成员界面
     private List<Member> memberList = new ArrayList<>();
     private RecyclerView memberRecyclerView;
-    private LinearLayoutManager layoutManager;
     private SwipeRefreshLayout memberRefresh;
     private MemberAdapter memberAdapter;
 
@@ -115,7 +118,10 @@ public class ProjectActivity extends BaseActivity implements ProjectView,AddMeet
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSprintRefresh;
     private MyRecyclerViewAdapter mSprintAdapter;
-    private List<Sprint> mSprintList = new ArrayList<>();
+    private Sprint.SprintStatus mSprintStatus;
+    private List<Sprint> mSprintList ;
+    private Sprint mNewSprint;
+    private Sprint mChangeSprint;
     private android.support.design.widget.FloatingActionButton fabNewSprint;
     private LinearLayout sprintContainer;
     private static final String ADD_SPRINT_FRAGMENT="add_sprint";
@@ -175,19 +181,21 @@ public class ProjectActivity extends BaseActivity implements ProjectView,AddMeet
         });
         mProjectPresenter=new ProjectPresenter(this,this);
         isLeader=getIntent().getBooleanExtra(IS_LEADER,false);
+        fabNewSprint.setEnabled(isLeader);
+        mSprintStatus= Sprint.SprintStatus.BB;
         mProject=new Project(getIntent().getIntExtra(PROJECT_ID,0),
                 getIntent().getStringExtra(PROJECT_NAME),
                 new Date(getIntent().getLongExtra(PROJECT_DATE,new Date().getTime())),
                 getIntent().getIntExtra(PROJECT_PROGRESS,0),
                 getIntent().getStringExtra(PROJECT_USERNAME));
-        initMeeting();
+
         meetingAdapter = new MeetingAdapter(meetingList);
         meetingRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         meetingRecyclerView.setAdapter(meetingAdapter);
         meetingRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-
+                mProjectPresenter.getMeetings();
             }
         });
         actionButton1.setOnClickListener(new View.OnClickListener() {
@@ -199,21 +207,18 @@ public class ProjectActivity extends BaseActivity implements ProjectView,AddMeet
             }
         });
 
-        initMember();
         memberAdapter = new MemberAdapter(memberList);
-        layoutManager = new LinearLayoutManager(this);
         memberRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         memberRecyclerView.setAdapter(memberAdapter);
         memberRefresh = (SwipeRefreshLayout) view3.findViewById(R.id.member_refresh);
         memberRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-
+                mProjectPresenter.getMembers();
             }
         });
 
         swagPoints.setEnabled(false);
-        setTotalProgress(40);
         mViewPager.setAdapter(new MyViewPagerAdapter(views));
         mViewPager.setCurrentItem(0);
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -236,14 +241,14 @@ public class ProjectActivity extends BaseActivity implements ProjectView,AddMeet
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
+                Log.e("george",state+"=state");
             }
         });
         fragments=new ArrayList<View>();
         mTitleList=new ArrayList<>();
-        mSprintList.add(new Sprint(2,"ww","eeeasds",new Date(),Sprint.SprintStatus.BB,4));
+        mSprintList=new ArrayList<>();
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mSprintAdapter= new MyRecyclerViewAdapter(this, mSprintList,isLeader);
+        mSprintAdapter= new MyRecyclerViewAdapter(this, mSprintList,isLeader,this);
         mRecyclerView.setAdapter(mSprintAdapter);
         fragments.add(view5);
         mTitleList.add("unburned");
@@ -252,20 +257,19 @@ public class ProjectActivity extends BaseActivity implements ProjectView,AddMeet
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (checkedId == top_rg_a.getId())
                 {
-                    /*mSprintList.add(new Sprint(2,"asd","qwdasd",new Date(), Sprint.SprintStatus.BB,3));
-                    mSprintAdapter.notifyDataSetChanged();*/
-
+                    mSprintStatus= Sprint.SprintStatus.BB;
                 }
                 else if (checkedId == top_rg_b.getId())
                 {
-
+                    mSprintStatus= Sprint.SprintStatus.BG;
                 }
                 else if(checkedId == top_rg_c.getId()) {
-
+                    mSprintStatus= Sprint.SprintStatus.BD;
                 }
                 else if(checkedId == top_rg_d.getId()) {
-
+                    mSprintStatus= Sprint.SprintStatus.BO;
                 }
+                mProjectPresenter.getSprintByProjectAndStatus();
             }
         });
         mTabbar.setTitles(R.string.tab1, R.string.tab2, R.string.tab3, R.string.tab4)
@@ -279,6 +283,16 @@ public class ProjectActivity extends BaseActivity implements ProjectView,AddMeet
                 mProjectPresenter.getSprintByProjectAndStatus();
             }
         });
+        progressRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mProjectPresenter.getProgress();
+            }
+        });
+        initSprint();
+        initMeeting();
+        initMember();
+        initProgress();
     }
 
     private void initViewPager(){
@@ -295,7 +309,6 @@ public class ProjectActivity extends BaseActivity implements ProjectView,AddMeet
         meetingRefresh = (SwipeRefreshLayout) view2.findViewById(R.id.meeting_refresh);
         floatingActionsMenu = (FloatingActionsMenu) view2.findViewById(R.id.multiple_actions);
         actionButton1 = (FloatingActionButton) view2.findViewById(R.id.action_a);
-        actionButton2 = (FloatingActionButton) view2.findViewById(R.id.action_b);
 
         //成员界面
         view3=inflater.inflate(R.layout.member_list, null);
@@ -322,29 +335,22 @@ public class ProjectActivity extends BaseActivity implements ProjectView,AddMeet
 
     }
     private void initMeeting() {
-        meetingList.add(new Meeting(new Date(),2,"吃饭",new ArrayList<String>()));
-        meetingList.add(new Meeting(new Date(),3,"麻辣烫",new ArrayList<String>()));
-        meetingList.add(new Meeting(new Date(),2,"吃蛋糕",new ArrayList<String>()));
+        mProjectPresenter.getMeetings();
     }
     private void initMember() {
-        Member m = new Member("george","无敌", 50);
-        memberList.add(m);
-        Member m2 = new Member("kuhn", "qwdq", 70);
-        memberList.add(m2);
-
+        mProjectPresenter.getMembers();
     }
-    private void setTotalProgress(int progress) {
-        swagPoints.setPoints(progress);
+    private void initSprint(){
+        mProjectPresenter.getSprintByProjectAndStatus();
     }
-
-    @Override
-    public void sendDateAndTime(Date date) {
-        this.date=date;
+    private void initProgress(){
+        mProjectPresenter.getProgress();
     }
 
     @Override
     public void onFragmentInteraction(Sprint sprint) {
-
+        mNewSprint =sprint;
+        mProjectPresenter.newSprint();
     }
 
     @Override
@@ -369,7 +375,7 @@ public class ProjectActivity extends BaseActivity implements ProjectView,AddMeet
 
     @Override
     public Sprint.SprintStatus getStatus() {
-        return Sprint.SprintStatus.BB;
+        return mSprintStatus;
     }
 
     @Override
@@ -388,5 +394,154 @@ public class ProjectActivity extends BaseActivity implements ProjectView,AddMeet
         mSprintAdapter.setSprints(mSprintList);
 
         mSprintAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public String getSprintName() {
+        return mNewSprint.getName();
+    }
+
+    @Override
+    public String getSprintContent() {
+        return mNewSprint.getContent();
+    }
+
+    @Override
+    public Integer getSprintWorkTime() {
+        return mNewSprint.getWorkTime();
+    }
+
+    @Override
+    public String getSprintMember() {
+        return mNewSprint.getUsername();
+    }
+
+    @Override
+    public long getSprintDDL() {
+        return mNewSprint.getDdl();
+    }
+
+    @Override
+    public Sprint.SprintStatus getNewSprintStatus() {
+        return mNewSprint.getStatus();
+    }
+
+    @Override
+    public Integer getChangeSprintId() {
+        return mChangeSprint.getId();
+    }
+
+    @Override
+    public Sprint.SprintStatus getChangeSprintStatus() {
+        Sprint.SprintStatus status=mChangeSprint.getStatus();
+        if (status.equals(Sprint.SprintStatus.BB)){
+            return Sprint.SprintStatus.BG;
+        }else if (status.equals(Sprint.SprintStatus.BG)){
+            return Sprint.SprintStatus.BD;
+        }else{
+            return Sprint.SprintStatus.BO;
+        }
+    }
+
+    @Override
+    public void showMeetingRefreshDialog() {
+        meetingRefresh.setRefreshing(true);
+    }
+
+    @Override
+    public void cancelMeetingRefreshDialog() {
+        meetingRefresh.setRefreshing(false);
+    }
+
+    @Override
+    public void initMeetingView(List<MetAndMem> metAndMems) {
+        List<Meeting> meetings=new ArrayList<>();
+        for (MetAndMem met :
+                metAndMems) {
+            Meeting m = new Meeting(new Date(met.getDate()),met.getMeetingId(),met.getName(),met.getMembers());
+            meetings.add(m);
+        }
+        Collections.sort(meetings, new Comparator<Meeting>() {
+            @Override
+            public int compare(Meeting o1, Meeting o2) {
+                return (int)(o1.getDate()-o2.getDate());
+            }
+        });
+        meetingAdapter.setMeetingList(meetings);
+        meetingAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public String getMeetingName() {
+        return newMetAndMem.getName();
+    }
+
+    @Override
+    public List<String> getMeetingMembers() {
+        return newMetAndMem.getMembers();
+    }
+
+    @Override
+    public long getMeetingDate() {
+        return newMetAndMem.getDate();
+    }
+
+    @Override
+    public void initMemberView(List<Member> members) {
+        memberList=members;
+        for (Member m:
+             memberList) {
+            if (m.getContribution()==null)
+                m.setContribution(0);
+        }
+        memberAdapter.setMemberList(members);
+        memberAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void showMemberRefreshDialog() {
+        memberRefresh.setRefreshing(true);
+    }
+
+    @Override
+    public void cancelMemberRefreshDialog() {
+        memberRefresh.setRefreshing(false);
+    }
+
+    @Override
+    public void initProgressView(Integer progress) {
+        Log.e("george","progress="+progress);
+        swagPoints.setPoints(progress);
+    }
+
+    @Override
+    public void showProgressRefreshDialog() {
+        progressRefresh.setRefreshing(true);
+    }
+
+    @Override
+    public void cancelProgressRefreshDialog() {
+        progressRefresh.setRefreshing(false);
+    }
+
+    @Override
+    public void onSprintChangeInteraction(int position) {
+        mChangeSprint=mSprintList.get(position);
+        mProjectPresenter.changeSprintStatus();
+        mSprintList.remove(position);
+        mSprintAdapter.setSprints(mSprintList);
+        mSprintAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mProjectPresenter.destroy();
+    }
+
+    @Override
+    public void sendDateAndTime(MetAndMem metAndMem) {
+        newMetAndMem=metAndMem;
+        mProjectPresenter.newMeeting();
     }
 }

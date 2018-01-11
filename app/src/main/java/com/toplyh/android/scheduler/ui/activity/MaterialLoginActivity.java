@@ -9,6 +9,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -85,6 +86,8 @@ public class MaterialLoginActivity extends BaseActivity implements LoginView {
         mLayout=findView(R.id.material_login_layout);
         fabRegister=findView(R.id.fab);
 
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
     }
 
     @Override
@@ -136,5 +139,11 @@ public class MaterialLoginActivity extends BaseActivity implements LoginView {
     @Override
     protected void permissionGrantedFail() {
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mLoginPresenter.destroy();
     }
 }

@@ -16,8 +16,6 @@ public abstract class ApiCallBack<M> extends Subscriber<M>{
 
     public abstract void onFinish();
 
-
-
     @Override
     public void onError(Throwable e) {
         e.printStackTrace();
@@ -48,5 +46,6 @@ public abstract class ApiCallBack<M> extends Subscriber<M>{
     @Override
     public void onNext(M m) {
         onSuccess(m);
+        onFinish();
     }
 }

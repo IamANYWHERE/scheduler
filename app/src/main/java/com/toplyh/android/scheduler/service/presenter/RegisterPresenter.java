@@ -43,7 +43,6 @@ public class RegisterPresenter extends BasePresenter<RegisterView> {
             @Override
             public void onSuccess(HttpsResult<String> model) {
                 if(model.getState()== StateTable.REGISTER_RIGHT) {
-                    mRegisterView.cancelDialog();
                     mRegisterView.toLoginActivity();
                 }else if(model.getState()==StateTable.REGISTER_ERROR){
                     mRegisterView.toastMessage("此账号已经注册！");
@@ -52,13 +51,12 @@ public class RegisterPresenter extends BasePresenter<RegisterView> {
 
             @Override
             public void onFailure(String msg) {
-                mRegisterView.cancelDialog();
                 mRegisterView.toastMessage(msg);
             }
 
             @Override
             public void onFinish() {
-
+                mRegisterView.cancelDialog();
             }
         };
 

@@ -97,4 +97,14 @@ public class SharedPreferencesUtils {
         editor.remove(key);
         editor.commit();
     }
+
+
+    public static boolean contain(Context context,String key){
+        SharedPreferences sp=context.getSharedPreferences(FILE_NAME,Context.MODE_PRIVATE);
+        if (sp.contains(key)){
+            return true;
+        }else {
+            return false;
+        }
+    }
 }

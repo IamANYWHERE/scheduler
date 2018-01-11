@@ -13,6 +13,7 @@ import android.transition.Transition;
 import android.transition.TransitionInflater;
 import android.view.View;
 import android.view.ViewAnimationUtils;
+import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
@@ -68,6 +69,9 @@ public class MaterialRegistActivity extends BaseActivity implements RegisterView
                 mRegisterPresenter.registerUser();
             }
         });
+
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
 
     }
 
@@ -210,5 +214,11 @@ public class MaterialRegistActivity extends BaseActivity implements RegisterView
             }
         });
         mAnimator.start();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mRegisterPresenter.destroy();
     }
 }

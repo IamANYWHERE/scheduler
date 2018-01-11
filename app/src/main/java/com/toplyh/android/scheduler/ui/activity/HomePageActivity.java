@@ -2,14 +2,17 @@ package com.toplyh.android.scheduler.ui.activity;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Build;
+import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,15 +27,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.toplyh.android.scheduler.R;
-import com.toplyh.android.scheduler.service.RetrofitHelper;
-import com.toplyh.android.scheduler.service.entity.remote.HttpsResult;
-import com.toplyh.android.scheduler.service.entity.remote.PJS;
 import com.toplyh.android.scheduler.service.entity.remote.Project;
 import com.toplyh.android.scheduler.service.entity.remote.ProjectAndMember;
 import com.toplyh.android.scheduler.service.entity.remote.Projects;
 import com.toplyh.android.scheduler.service.presenter.HomePagePresenter;
+import com.toplyh.android.scheduler.service.utils.SharedPreferencesUtils;
 import com.toplyh.android.scheduler.service.view.HomePageView;
 import com.toplyh.android.scheduler.ui.adapter.HomePageAdapter;
 import com.toplyh.android.scheduler.ui.fragment.AddProjectDialogFragment;
@@ -43,12 +43,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import rx.Observable;
+import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 
-public class HomePageActivity extends BaseActivity implements HomePageView,AddProjectDialogFragment.OnAddFragmentInteractionListener{
+public class HomePageActivity extends BaseActivity implements HomePageView,
+        AddProjectDialogFragment.OnAddFragmentInteractionListener,SensorEventListener{
 
     private HomePagePresenter mHomePagePresenter;
     private DrawerLayout mDrawerLayout;
@@ -74,6 +77,17 @@ public class HomePageActivity extends BaseActivity implements HomePageView,AddPr
     private static final String ADDPROJECTDIALOGFRAGMENT = "addprojectdialogfragment";
 
 
+    //传感器管理器
+    private SensorManager mSensorManager;
+
+    //加速度传感器
+    private Sensor mAccelerometerSensor;
+
+    //是否震动
+    private boolean isShake;
+
+    //获取Bibrator震动服务
+    private Vibrator mVibrator;
 
     @Override
     public void showDialog() {
@@ -154,6 +168,21 @@ public class HomePageActivity extends BaseActivity implements HomePageView,AddPr
         return mProjectAndMember;
     }
 
+    @Override
+    public void shake() {
+        mVibrator.vibrate(300);
+    }
+
+    @Override
+    public void setShake(Boolean b) {
+        isShake=b;
+    }
+
+    @Override
+    public void openProjectFragment() {
+        mAddProjectDialogFragment.show(getFragmentManager(),ADDPROJECTDIALOGFRAGMENT);
+    }
+
 
     private JellyListener jellyListener = new JellyListener() {
         @Override
@@ -215,16 +244,8 @@ public class HomePageActivity extends BaseActivity implements HomePageView,AddPr
         super.initData();
         mProjects=new ArrayList<>();
         mHomePagePresenter=new HomePagePresenter(this,this);
-        /*mProjects.add(new Project(1,getString(R.string.project1_title),new Date(),27));
-        mProjects.add(new Project(1,getString(R.string.project3_title),new Date(),27));
-        mProjects.add(new Project(1,getString(R.string.project3_title),new Date(),27));
-        mProjects.add(new Project(1,getString(R.string.project3_title),new Date(),27));
-        mProjects.add(new Project(1,getString(R.string.project3_title),new Date(),27));
-        mProjects.add(new Project(1,getString(R.string.project3_title),new Date(),27));
-        mProjects.add(new Project(1,getString(R.string.project3_title),new Date(),27));
-        mProjects.add(new Project(1,getString(R.string.project3_title),new Date(),27));
-        mProjects.add(new Project(1,getString(R.string.project3_title),new Date(),27));*/
-
+        isShake=false;
+        mVibrator=(Vibrator)getSystemService(VIBRATOR_SERVICE);
         showProjects();
 
         mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -279,6 +300,7 @@ public class HomePageActivity extends BaseActivity implements HomePageView,AddPr
                 return false;
             }
         });
+
     }
 
     private void showSearchProjects(List<Project> projects){
@@ -316,6 +338,11 @@ public class HomePageActivity extends BaseActivity implements HomePageView,AddPr
     }
 
     @Override
+    public void setShakeFalse() {
+        isShake=false;
+    }
+
+    @Override
     public void onFragmentInteraction(ProjectAndMember projectAndMember) {
         mProjectAndMember=projectAndMember;
         mHomePagePresenter.newProject();
@@ -324,7 +351,7 @@ public class HomePageActivity extends BaseActivity implements HomePageView,AddPr
     private void selectItem(int itemid) {
         switch (itemid) {
             case R.id.menu_history:{
-                Toast.makeText(HomePageActivity.this, "点击Fri", Toast.LENGTH_SHORT).show();
+                Toast.makeText(HomePageActivity.this, "功能敬请期待！", Toast.LENGTH_SHORT).show();
                 //showProjects();
                 break;
             }
@@ -335,8 +362,10 @@ public class HomePageActivity extends BaseActivity implements HomePageView,AddPr
                 break;
             }
             case R.id.menu_logout:{
-                /*Intent intent = new Intent(HomePageActivity.this,MainActivity.class);
-                startActivity(intent);*/
+                Intent intent = new Intent(HomePageActivity.this,MaterialLoginActivity.class);
+                SharedPreferencesUtils.clearAll(HomePageActivity.this);
+                startActivity(intent);
+                finish();
                 break;
             }
             case R.id.menu_about: {
@@ -350,5 +379,52 @@ public class HomePageActivity extends BaseActivity implements HomePageView,AddPr
             default:
                 break;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mHomePagePresenter.destroy();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mSensorManager=(SensorManager)getSystemService(SENSOR_SERVICE);
+        if (mSensorManager!=null){
+            mAccelerometerSensor =mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+            if (mAccelerometerSensor !=null){
+                mSensorManager.registerListener(this,mAccelerometerSensor,SensorManager.SENSOR_DELAY_UI);
+            }
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mSensorManager!=null){
+            mSensorManager.unregisterListener(this);
+        }
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        int type=event.sensor.getType();
+
+        if (type==Sensor.TYPE_ACCELEROMETER){
+            float[] values=event.values;
+            float x=values[0];
+            float y=values[1];
+            float z=values[2];
+
+            if ((Math.abs(x)>17||Math.abs(y)>17||Math.abs(z)>17)&&!isShake){
+                mHomePagePresenter.shake();
+            }
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
     }
 }

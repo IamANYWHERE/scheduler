@@ -37,4 +37,17 @@
     <color name="black_semi_transparent">#B2000000</color>
     <color name="md_grey_900">#212121</color>
 
+    <color name="splash_background">#4bb44d</color>
+    <color name="color_login_title_view">#2fa881</color>
+    <color name="color_login_title_text">#FFCC00</color>
+    <color name="color_login_name_text_color_hint">#c5c5c5</color>
+    <color name="color_login_name_edit_text_color">#2fa881</color>
+    <color name="color_login_pwd_edit_text_color">#2fa881</color>
+    <color name="color_login_button_text_color">#d3d3d3</color>
+    <color name="color_register_card_background">#2ea67f</color>
+    <color name="color_register_title_text_color">#fff</color>
+    <color name="color_register_input_text_color">#f0f7f4</color>
+    <color name="color_register_button_text_color">"#2fa881</color>
+
+
 </resources>

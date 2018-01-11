@@ -37,7 +37,7 @@ public class AddSprintFragment extends DialogFragment {
         mSprintName=(EditText) view.findViewById(R.id.sprint_name);
         mSprintContent=(EditText)view.findViewById(R.id.sprint_content);
         mSprintWorkTime=(EditText)view.findViewById(R.id.sprint_worktime);
-        mSprintName=(EditText)view.findViewById(R.id.sprint_user);
+        mSprintUser=(EditText)view.findViewById(R.id.sprint_user);
         mDatePicker=(DatePicker)view.findViewById(R.id.sprint_date_picker);
 
         final Calendar calendar=Calendar.getInstance();
@@ -56,7 +56,8 @@ public class AddSprintFragment extends DialogFragment {
                     public void onClick(DialogInterface dialog, int which) {
                         if (mSprintName.getText().toString().equals("")||
                                 mSprintContent.getText().toString().equals("")||
-                                mSprintWorkTime.getText().toString().equals("")){
+                                mSprintWorkTime.getText().toString().equals("")||
+                                mSprintUser.getText().toString().equals("")){
                             Toast.makeText(getActivity(), "输入栏为空！", Toast.LENGTH_SHORT).show();
                             return;
                         }
